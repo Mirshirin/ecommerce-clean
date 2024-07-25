@@ -42,7 +42,9 @@
                   @endif                
                 </td>             
                 <td> 
-             
+                <form action="{{ route('users.destroy', $user->id) }}" method="post">
+                            @csrf
+                            @method('DELETE')
                   @if (in_array('Super Admin', $user->getRoleNames()->toArray() ?? []) )
                       @if (Auth::user()->hasRole('Super Admin')) 
                          <a href="{{ route('users.edit',$user->id ) }}" class="btn btn-sm btn-info">Edit</a>  
@@ -60,7 +62,8 @@
                         @endif
                       @endcan 
                   @endif
-              
+                  </form>
+
 
                 </td>
             </tr>

@@ -4,10 +4,10 @@
   <div class="card">
     <div class="card-body">
         <h4 class="card-title">Create User</h4>      
-        <form id="frm" class="form-inline" method="PUT" action="{{ route('users.store') }}" enctype="multipart/form-data">
+        <form id="frm" class="form-inline" method="POST" action="{{ route('users.store') }}" enctype="multipart/form-data">
             @csrf
           <label class="sr-only-visible" for="name">Name</label>
-          <input type="text" class="form-control @error('name') is-invalid @enderror mb-2 mr-sm-2" name="name" id="name" value="{{ old('name') }}" placeholder="Enter your name" style= "background-color:white !important; color: black;" >
+          <input type="text" class="form-control @error('name') is-invalid @enderror mb-2 mr-sm-2" name="name" id="name" placeholder="Enter your name" style= "background-color:white !important; color: black;" >
             @error('name')
                     <span class="text-danger">{{ $message }}</span>
             @enderror

@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Hash;
 use App\Contracts\UserRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -27,16 +28,16 @@ class UserRepository implements UserRepositoryInterface
          return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'phone' => $data['phone'],
-            'address' => $data['address'],
-            'password' => $data['password'],
+            'phone' => $data['phone'] ?? null,
+            'address' => $data['address'] ?? null,
+            'password' => bcrypt($data['password']),
         ]);
        
     }
     public function edit($id)
     {
         $user= User::find($id);        
-        return view('admin.users.edit-user');//->with('user' , $user);
+        return view('admin.users.edit-user')->with('user' , $user);
     }
 
     public function update(array $data,$id)
@@ -50,13 +51,18 @@ class UserRepository implements UserRepositoryInterface
             'address' => $data['address'],
          
         ]);
-
+        // if (!empty($data['password'])){
+        //     $user->update([
+        //         'pssword' => Hash::make($data['password']),
+        //     ]);
+        // }
+        
         return $user;
     }
     public function destroy($id)
     {
         try {
-            $user=$this->findUserById($id);
+            $user=$this->findUserById($id);          
             $user->syncRoles([]);
             $user->delete();
             return true;

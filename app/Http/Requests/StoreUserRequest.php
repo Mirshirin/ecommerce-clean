@@ -31,11 +31,13 @@ class StoreUserRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:250',
-            'email' => 'required|string|email:rfc,dns|max:250|unique:users,email',
+        //    'email' => 'required|string|email:rfc,dns|max:250|unique:users,email',
+            'email' => 'required|string|email|max:250|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'roles' => 'required',
-            'phone' => 'string','max:255',
-            'address' => ['string','max:255'],
+            'phone' => 'nullable|string|max:255',
+            'address' => 'nullable|string|max:255',
+            'roles' => 'required|array',
+           
            
             
         ];

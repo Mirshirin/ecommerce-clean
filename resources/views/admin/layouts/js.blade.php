@@ -1,6 +1,7 @@
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 <script>
   $(document).ready(function(){
     // Set up the CSRF token for all AJAX requests
@@ -10,6 +11,14 @@
       }
     });
 
+    @if (session('message'))  
+        swal({  
+        title: "{{  session('message') }} ",
+        icon: "success",
+        button: "ok",
+          });
+    @endif
+  
     // Function to handle deletion
     function deleteItem(delete_id, itemType) {
       swal({
@@ -28,8 +37,7 @@
 
           $.ajax({
             type: "DELETE",
-            url: '/admin/'+ itemType+'s/'+ delete_id,  
-       
+            url: '/admin/'+ itemType+'s/'+ delete_id,         
             data: data,
             success: function(response) {
               swal(response.status, {
@@ -43,18 +51,18 @@
         }
       });
     }
-
-    // Attach click event to delete buttons
-    $('.deletebtn').click(function(e) {
+ // Attach click event to delete buttons
+ $('.deletebtn').click(function(e) {
       e.preventDefault();
       var delete_id = $(this).closest("tr").find('.delete_val_id').val();
       //var itemType = $(this).closest("tr").find('.item_type').attr('class').split(' ')[1]; 
       var itemType =  $(this).closest("tr").attr('class').split(' ')[1];
-  console.log(itemType);
-  console.log(delete_id );
+      console.log(itemType);
+      console.log(delete_id );
 
       deleteItem(delete_id, itemType);
     });
+   
   });
 
   
@@ -113,17 +121,9 @@
    <!--    sweetalert code -->
 
    <script src="{{ asset('admin/assets/js/sweetalert.js') }}"></script>
- 
-   <script>
-        @if (session('message'))
-        swal({
-            title: "{{  session('message') }} ",
-            icon: "success",
-            button: "ok",
-        });
 
-        @endif
-    </script>
- 
 
-   
+
+<script>
+
+</script>

@@ -15,6 +15,8 @@ use App\Contracts\OrderRepositoryInterface;
 use App\Contracts\ProductRepositoryInterface;
 use App\Contracts\CategoryRepositoryInterface;
 use App\Contracts\PermissionRepositoryInterface;
+use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Notifications\Messages\MailMessage;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -33,7 +35,12 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(RoleRepositoryInterface::class, RoleRepository::class, function ($app) {
             return new RoleRepository(new Role());
         });
-
+        VerifyEmail::toMailUsing(function (object $notifiable, string $url) {
+            return (new MailMessage)
+                ->subject('Subject')
+                ->line('this is a content.')
+                ->action('button', $url);
+        });
 
     }
 
