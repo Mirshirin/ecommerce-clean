@@ -18,10 +18,11 @@
                 </tr>
             </thead>           
             <tbody>  
+           
                 @forelse ($roles as $role)
+                <tr>
                 <tr class="item_type role">
                 <input type="hidden" class="delete_val_id" value="{{ $role->id }}">
-              
                     <th scope="row">{{ $loop->iteration }}</th>
                     <td>{{ $role->name }}</td>
                     <td>
@@ -57,7 +58,7 @@
                     </td>
                 @endforelse
                
-          
+                </tr> 
                 
                        
 
