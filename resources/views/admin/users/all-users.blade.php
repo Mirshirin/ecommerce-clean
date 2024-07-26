@@ -2,7 +2,6 @@
 
 <div class="col-lg-12 grid-margin stretch-card">
   <div class="card">
-
     <div class="card-body">
         <div class="d-flex justify-content-between">
           <h4 class="card-title">Users List</h4>
@@ -43,8 +42,8 @@
                 </td>             
                 <td> 
                 <form action="{{ route('users.destroy', $user->id) }}" method="post">
-                            @csrf
-                            @method('DELETE')
+                  @csrf
+                  @method('DELETE')
                   @if (in_array('Super Admin', $user->getRoleNames()->toArray() ?? []) )
                       @if (Auth::user()->hasRole('Super Admin')) 
                          <a href="{{ route('users.edit',$user->id ) }}" class="btn btn-sm btn-info">Edit</a>  

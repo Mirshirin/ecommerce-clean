@@ -55,8 +55,8 @@
  $('.deletebtn').click(function(e) {
       e.preventDefault();
       var delete_id = $(this).closest("tr").find('.delete_val_id').val();
-      //var itemType = $(this).closest("tr").find('.item_type').attr('class').split(' ')[1]; 
-      var itemType =  $(this).closest("tr").attr('class').split(' ')[1];
+      var itemType =  $(this).closest("tr").attr('class').split(' ')[1];     
+     
       console.log(itemType);
       console.log(delete_id );
 

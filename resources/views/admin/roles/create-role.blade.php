@@ -19,7 +19,6 @@
 <div class="col-12 grid-margin stretch-card">
   <div class="card">
     <div class="card-body">
-      @include('admin.layouts.errors')
     <h4 class="card-title">Create Role</h4>   
     <form id="frm" class="form-inline" method="POST" action="{{ route('roles.store') }}">
         @csrf

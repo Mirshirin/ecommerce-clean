@@ -8,10 +8,8 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
@@ -25,9 +23,8 @@ return new class extends Migration
             $table->integer('quantity');
             $table->string('image');
             $table->unsignedBigInteger('product_id');
-            $table->unsignedBigInteger('user_id');                 
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');               
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');            
+ 
             // payment/
             $table->string('payment_status')->nullable();
             $table->string('delivery_status')->nullable();
@@ -37,10 +34,8 @@ return new class extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('orders');
     }

@@ -31,7 +31,7 @@ class HomeController extends Controller
     public function showCarts(){
         if(Auth::id()){
             $id = Auth::user()->id;
-            $cartProducts=Cart::where('user_id',$id)->get();
+            $cartProducts=Cart::where('id',$id)->get();
             return view('home.cart.show-carts')->with('cartProducts',$cartProducts);
         }
             return redirect()->route('login');   
@@ -59,7 +59,7 @@ class HomeController extends Controller
            }         
            $cart->image=$product->image;
            $cart->quantity=$request->quantity;
-           $cart->user_id= $user->id;
+           $cart->id= $user->id;
            $cart->product_id=$product->id;
            $cart->save();
            return redirect()->back();
@@ -77,7 +77,7 @@ class HomeController extends Controller
     }
     public function cashOrder(){
         $userId=Auth::user()->id;
-        $cartInfo= Cart::where('user_id',$userId)->get();
+        $cartInfo= Cart::where('id',$userId)->get();
         foreach ($cartInfo as $data ){
             $order = new Order();
             $order->name=$data->name;
@@ -88,7 +88,7 @@ class HomeController extends Controller
             $order->price=$data->price;                        
             $order->image=$data->image;
             $order->quantity=$data->quantity;
-            $order->user_id= $data->user_id;
+            $order->id= $data->id;
             $order->product_id=$data->product_id;
             $order->payment_status='cash on delivery';  
             $order->delivery_status='processing';            

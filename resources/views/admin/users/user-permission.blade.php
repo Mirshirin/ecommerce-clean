@@ -28,7 +28,7 @@
 
         <form id="frm" class="form-inline" method="POST" action="{{ route('users.permissions.store',$user->id) }}">
             @csrf            
-                  
+               
             <label class="sr-only-visible" for="inlineFormInputName2">Role List</label>
             <select name="permissions[]" id="roles" class="form-control" style= "background-color:white !important; color: black;" multiple >
                 @foreach ($roles as $role) 

@@ -11,7 +11,8 @@ interface RoleRepositoryInterface
     public function getAllRolesWithPermissions();
     public function getRolePermissions($id);
     public function findRoleById($id);
-    public function createRole(array $data);
-    public function updateRole(array $data,$id);
+    public function edit($id);
+    public function store(array $data);
+    public function update(array $data,$id);
     public function destroy($id);
 }

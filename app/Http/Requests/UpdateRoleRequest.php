@@ -2,47 +2,32 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth; 
+
 class UpdateRoleRequest extends FormRequest
 {
-    protected $user; // Define a property to hold the user instance
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
 
     /**
-     * Instantiate a new request instance.
+     * Get the validation rules that apply to the request.
      *
-     * @return void
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function __construct()
+    public function rules(): array
     {
-        parent::__construct();
+        //dd('rrrrrr');
 
-        // Assuming you want to use the authenticated user
-        $this->user = Auth::user(); // Get the authenticated user
-    }
-
-    public function authorize()
-    {
-        return auth()->check();//&& auth()->user()->isStaffUser();
-    }
-
-    public function rules()
-    {
         return [
-            'name' => ['required','string','max:255'],    
-            'permissions'=> ['required', 'array'],
-
-            
-        ];
-    }
-
-    public function messages()
-    {
-        return [
-            'name.required' => 'name is required.',
-            'permissions.required' => 'permission is required.',
            
+
+            'name' => 'required|string|max:250|unique:roles,name,'.$this->role,
+            'permissions' => 'required',
         ];
     }
 }

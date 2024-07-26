@@ -17,7 +17,7 @@
                @can(['view-product'])
 
                 <li class="nav-item">
-                   <a class="nav-link" href="{{ route('products.index') }}">Products</a>
+                   <a class="nav-link" href="{{ route('admin-dashboard') }}">Products</a>
                 </li>
               
                 @endcan

@@ -37,19 +37,34 @@ class RoleRepository implements RoleRepositoryInterface
     {
         return Role::find($id);
     }
-    public function createRole(array $data)
-    {
-        return Role::create($data);
+    // public function create()
+    // {
+    //     return view('roles.create', [
+    //         'permissions' => Permission::get()
+    //     ]);
+    // }
+    public function store(array $data)
+    {  
+         return Role::create([
+            'name' => $data['name'],
+          
+        ]);
+       
     }
-    public function updateRole($data,$id)
+    public function edit($id)
     {
-      
+        $role= Role::find($id);        
+        return view('admin.roles.edit-role')->with('role' , $role);       
+    }
+
+    public function update($data,$id)
+    {      
         $role= $this->findRoleById($id);
         $role->update($data);
         return $role;
     }
     public function destroy($id)
-    {
+    {   
         $role = $this->findRoleById($id);
         $role->delete();
         return $role; 

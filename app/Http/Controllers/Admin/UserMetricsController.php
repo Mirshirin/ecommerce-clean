@@ -20,7 +20,7 @@ class UserMetricsController extends Controller
                 DB::raw('SUM(CASE WHEN payment_status = "paid" THEN price ELSE 0 END) as revenue_Sales'),
                 DB::raw('COUNT(DISTINCT CASE WHEN payment_status = "paid" THEN product_id END) as productSoldCount')
             )
-            ->where('user_id', $id)
+            ->where('id', $id)
             ->first();
 
         return [
