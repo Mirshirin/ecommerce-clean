@@ -18,10 +18,11 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use League\CommonMark\Extension\CommonMark\Node\Inline\Link;
+use App\Models\Relations\UserRelations;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable,HasRoles;
+    use HasApiTokens, HasFactory, Notifiable,HasRoles ,UserRelations;
 
     /**
      * The attributes that are mass assignable.
@@ -65,33 +66,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     
-    // public function permissions(){
-    //     return $this->belongsToMany(Permission::class);
-    // }
-
-    // public function roles(){
-    //     return $this->belongsToMany(Role::class);
-    // }
     
-    // public function hasPermission($permission){      
-    //        return $this->permissions->contains($permission) || $this->hasRole($permission->roles);           
-    //     }
-       
-    // public function hasRole($roles){
-      
-    //    return !! $roles->intersect($this->roles)->all();
-    // }
-    // public function hasRole($roles){
-    //     if(is_string($roles))
-    //     {
-    //         return $this->roles->contain('name',$roles);
-    //     }
-    //     return !! $roles->intersect($this->roles)->count();
-    //     }
-
-    public function carts(){
-        return $this->hasMany(Cart::class);
-    }
 
 
 }   

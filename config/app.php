@@ -207,6 +207,8 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
+        Shetabit\Payment\Provider\PaymentServiceProvider::class,
+
 
 
         /*
@@ -237,6 +239,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
+        'Payment' => Shetabit\Payment\Facade\Payment::class,
 
 
     ])->toArray(),

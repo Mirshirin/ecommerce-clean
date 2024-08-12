@@ -30,10 +30,13 @@ class UserRepository implements UserRepositoryInterface
             'email' => $data['email'],
             'phone' => $data['phone'] ?? null,
             'address' => $data['address'] ?? null,
-            'password' => bcrypt($data['password']),
+            'password' => $data['password']  ,
+            //'password' => Hash::make($data['password'])  ,//bcrypt($data['password']),
         ]);
-       
+      // dd(Hash::make($data['password']) );
     }
+
+  
     public function edit($id)
     {
         $user= User::find($id);        
@@ -49,14 +52,14 @@ class UserRepository implements UserRepositoryInterface
             'email' => $data['email'],
             'phone' => $data['phone'],
             'address' => $data['address'],
-         
+          
         ]);
-        // if (!empty($data['password'])){
-        //     $user->update([
-        //         'pssword' => Hash::make($data['password']),
-        //     ]);
-        // }
-        
+        if (!empty($data['password'])){
+            $user->update([
+                'pssword' => Hash::make($data['password']),
+            ]);
+        }
+
         return $user;
     }
     public function destroy($id)

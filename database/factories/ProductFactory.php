@@ -13,13 +13,13 @@ class ProductFactory extends Factory
     {
 
         return [
-            'image' =>'1713719850.jpg',
+            'image' => $this->faker->imageUrl(640,480),
             'title' => $this->faker->name(),
-            'description'  => fake()->text(10),         
+            'description'  => $this->faker->sentence,         
             'price' => $this->faker->numberBetween(1000,2000),
             'discount_price' => $this->faker->numberBetween(1,10),
             'quantity' => $this->faker->numberBetween(1,10),
-            'category_id'=> $this->faker->numberBetween(1,2),
+            'category_id'=> $this->faker->numberBetween(3,6),
          
         ];
     }

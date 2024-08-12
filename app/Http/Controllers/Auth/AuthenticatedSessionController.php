@@ -31,7 +31,7 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
         $request->session()->regenerate();
    
- // Check if the authenticated user is a superuser
+        // Check if the authenticated user is a superuser
         if (($request->user()->hasRole('Super Admin') || $request->user()->role === 'Admin')) {            
         return redirect()->intended('../admin/dashboard');
         }

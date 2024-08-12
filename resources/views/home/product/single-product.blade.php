@@ -15,7 +15,13 @@
 
 <section class="arrival_section">
    <div class="container"  style="float: right; margin-right: 1px;">
-      <img src="/productImage/{{ $product->image }}"   alt="{{ $product->title }}">
+      <!-- <img src="/productImage/{{ $product->image }}"   alt="{{ $product->title }}"> -->
+      @if (strpos($product->image,'http') !== false)
+         <img src="{{ $product->image }}" alt="{{ $product->title }}">
+      @else    
+         <img src="/productImage/{{ $product->image }}" alt="{{ $product->title }}">
+      @endif
+     
    </div>
    <div style="margin-left:40px; ">
    <div class="heading_container remove_line_bt">
@@ -49,12 +55,13 @@
          <div class="input-group">
             <div>
                <input type="number" id="numericInput" name="quantity" class="form-control" value="0"  size="2">
-               <input type="submit" value="Add to Cart" name="" class="option1" > 
+               <input type="submit" value="Add to Cart" name="" class="option1" >                
+               <a href="{{ url('/') }}" class="btn btn-danger">Continue Shopping</a>
             </div>
          </div>  
    </form>
 </div>
-   
+
 </div>
    
 </section>

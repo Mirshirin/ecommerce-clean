@@ -33,7 +33,7 @@ Route::resource('categories',CategoryController::class);
 Route::get('/change-password', [UserController::class, 'changePassword'])->name('change-password');
 Route::patch('/update-password', [UserController::class, 'updatePassword'])->name('update-password');
 
-//permission and role user 
+// //permission and role user 
 Route::get('/users/{id}/permissions',[UserPermissionController::class,'createUserPermission'])->name('users.permissions')->middleware('can:staff-user-permission');
 Route::post('/users/{id}/permissions',[UserPermissionController::class,'storeUserPermission'])->name('users.permissions.store')->middleware('can:staff-user-permission');
 

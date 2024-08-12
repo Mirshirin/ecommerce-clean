@@ -8,6 +8,7 @@ interface RoleRepositoryInterface
     public function getAllRoles();
     public function getAllRoleNames();
     public function getAllPermissions();
+    public function getAllPermissionNames();
     public function getAllRolesWithPermissions();
     public function getRolePermissions($id);
     public function findRoleById($id);

@@ -1,4 +1,5 @@
 @extends('home.master')
+
 @section('content')
     <section style="height: 100vh; margin-top:70px">
         <div class="container">
@@ -18,46 +19,58 @@
                         @php
                         $totalPrice =0;
                         $totalProduct =0;
-                        @endphp                 
-                        @foreach ( $cartProducts as  $cartProduct )
+                        @endphp  
+                                       
+                        @if(session('cart'))
+                            @foreach((array) session('cart') as $id => $cartProduct)
+                                <tr>                                   
+                                    <td>{{ $cartProduct['product_title'] }}</td>   
+                                    <td>{{ $cartProduct['quantity'] }}</td>   
+                                    <td>{{ $cartProduct['price'] }}</td>   
+                                    <td>  <img src="{{  $cartProduct['image'] }}"  style="width:50px" class="img-responsive"></td>  
+                                    
+                                    <form action="{{ route('delete-carts', $id) }}" method="post">
+                                        @csrf                                
+                                        @method('DELETE')
+                                    <td><button type="submit" class="btn btn-danger btn-sm">Remove</button></td> 
+                                    </form>
+                                </tr>                            
+                         
+                                @php
+                                $totalPrice += $cartProduct['price']* $cartProduct['quantity'];
+                                $totalProduct +=$cartProduct['quantity'];
+                                @endphp 
                        
-                        <tr>
-                            <td>{{ $cartProduct->product_title }}</td>   
-                            <td>{{ $cartProduct->quantity }}</td>   
-                            <td>{{ $cartProduct->price }}</td>   
-                            <td>
-                                <img  src="/productImage/{{ $cartProduct->image }}" alt="{{ $cartProduct->product_title }}" style="width:30px ">  
-                            </td>
-                            <form action="{{ route('delete-carts', $cartProduct->id) }}" method="post">
-                                @csrf                                
-                                @method('DELETE')
-                            <td><button type="submit" class="btn btn-danger btn-sm">Remove</button></td> 
-                            </form>
-                        </tr>  
-                        @php
-                        $totalPrice += $cartProduct->price;
-                        $totalProduct +=$cartProduct->quantity;
-                        @endphp 
                         @endforeach 
+                        @endif 
                         <tr>
-                            <td>Products</td>
-                            <td>{{ $totalProduct }}</td>
-                            <td>${{ $totalPrice }}</td>
                             <td></td>
-                            <td><big>total</td>
-                            
+                            <td>{{ $totalProduct }}</td>
+                            <td>${{ $totalPrice }} total</td>
+                            <!-- <td><big>total</td> -->
+                            <td></td>
+                            <td></td>
                         </tr> 
-                        
-                    </tbody>
+                        </tbody>
+   
+                 
                     
                   </table>
                   <h1 style="font-size: 20px; font-weight:700;">Proceed to order</h1>
-                  <a href="{{ route('cash-order') }}" class="btn btn-danger">Cash on Delivery</a>
-                  <a href="{{ route('stripe',$totalPrice) }}" class="btn btn-danger">Pay Using Card</a>
-                
+                  <a href="{{ url('/') }}" class="btn btn-danger continue-shopping-btn">Continue Shopping</a>
+           
+                  <form id="cash_on_delivery" class="form-inline cash-on-delivery-form" method="POST" action="{{ route('cash-order') }}"   >
+                  @csrf   
+                        <input type="hidden" name="orderMethod" value="Cash on Delivery">
+                        <button type="submit" class="btn btn-danger"  >Cash on Delivery</button>
+                  </form>
+                  
+                 
                 </div>
                 
             </div>  
         </div>
     </section>
 @endsection
+
+

@@ -14,15 +14,9 @@ use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvid
 
 class AuthServiceProvider extends ServiceProvider
 {
-    //protected $permissionRepository;
     protected $policies = [
-        // 'App\Models\Model' => 'App\Policies\ModelPolicy',
     ];
 
-    // public function __construct(PermissionRepositoryInterface $permissionRepository )
-    // {
-    //      $this->permissionRepository = $permissionRepository;
-    // }
     
     public function boot()
     {

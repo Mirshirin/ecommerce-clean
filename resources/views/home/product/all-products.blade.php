@@ -25,7 +25,10 @@
                            <input type="number" min="1" name="quantity" value="1" id="" class="option1">
                         </div >
                         <div class="col-md-4">
-                           <input type="submit" value="Add to Cart" name="" id="" class="option1">
+                           <!-- <input type="submit" value="Add to Cart" name="" id="" class="option1"> -->
+                           <h3 class="mb-3">Add to Cart"</h3>
+
+                         
                         </div>
                      </div>
                   </form>

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Rules\Password;
 use App\Models\User;
+use App\Models\Permission;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
@@ -14,6 +16,9 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Contracts\RoleRepositoryInterface;
 use App\Contracts\UserRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+
+
+
 
 class UserController extends Controller
 {
@@ -45,14 +50,23 @@ class UserController extends Controller
     }
     public function create(){ 
 
-        $roleNames = $this->roleRepository->getAllRoleNames();        
-        return view('admin.users.create-user',  ['roles' => $roleNames]);   
+        $roleNames = $this->roleRepository->getAllRoleNames(); 
+      
+        Log::info('Roles:', $roleNames);
+       
+        return view('admin.users.create-user',  [
+            'roles' => $roleNames ,
+         
+
+        ]);   
        
     }
     
-    public function store(StoreUserRequest $request)
-    {     
     
+    public function store(StoreUserRequest $request)
+    {  
+  
+
         $validatedData = $request->validated(); 
         $user = app(UserRepositoryInterface::class)->store($validatedData);  
         
@@ -63,7 +77,7 @@ class UserController extends Controller
     
         if (method_exists($user, 'assignRole')) {
             foreach ($request->roles as $roleName) {
-                Log::info('Entering '); 
+                Log::info('Entering assignRole'); 
 
                 DB::table('model_has_roles')->insert([
                   
@@ -71,13 +85,35 @@ class UserController extends Controller
                     'model_type' => get_class($user),
                     'model_id' => $user->id,
                 ]);
-            }
-            
-         //  $user->assignRole($request->roles);
+            }           
+
+         
         } else {
             Log::warning('assignRole method not found on user object.');
-        }
-    
+        }  
+        if (method_exists($user, 'syncPermissions')) {
+            $permissions = DB::table("role_has_permissions")->where("role_id",\Spatie\Permission\Models\Role::where('name', $roleName)->first()->id)
+            ->pluck('permission_id')
+            ->all();
+            
+            foreach ($permissions as $permission) {
+                Log::info('Assigning permission: ' .$permission);
+        
+             
+                if ($permission) {
+                    DB::table('model_has_permissions')->insert([
+                        'permission_id' => $permission,
+                        'model_type' => get_class($user),
+                        'model_id' => $user->id,
+                    ]);
+                    Log::info('permission number: ' .$permission);
+                    Log::info('model_id: ' .$user->id);
+                } else {
+                    Log::warning("Permission '{  $permissions}' not found.");
+                }
+            }
+        }   
+
         return redirect(route('users.index'))->with('message','user was stored');
     }
     
@@ -100,8 +136,9 @@ class UserController extends Controller
 
             $roleNames = $this->roleRepository->getAllRoleNames();
             Log::info('Fetched role names'); // لاگ دریافت نام‌های نقش‌ها
-            Log::info('Fetched role names',[                'userRoles' => $user->roles->pluck('name')->all()
-        ]); 
+            Log::info('Fetched role names',[ 'userRoles' => $user->roles->pluck('name')->all() ]); 
+            Log::info('Fetched role names',[ 'userRoles' => $roleNames ]); 
+
          
             return view('admin.users.edit-user', [
                 'roles' => $roleNames,
@@ -134,10 +171,10 @@ class UserController extends Controller
 
         // }
 
-        // if (!empty($request->has('password'))) {
-        //     // Hash the password
-        //     $validatedData['password'] = Hash::make($validatedData['password']);
-        // }
+        if (!empty($request->has('password'))) {
+            // Hash the password
+            $validatedData['password'] = $validatedData['password'];
+        }
         $user = app(UserRepositoryInterface::class)->update($validatedData,$user->id); 
         if ($request->has('roles')) {
             $user->roles()->detach();

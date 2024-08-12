@@ -1,7 +1,7 @@
 
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
     <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
-      <a class="sidebar-brand brand-logo" href="index.html"><img src="/images/logo.png" alt="logo" /></a>
+      <a class="sidebar-brand brand-logo" href="{{ url('/') }}" ><img src="/images/logo.png" alt="logo" /></a>
       <a class="sidebar-brand brand-logo-mini" href="index.html"><img src="/images/logo.png" alt="logo" /></a>
     </div>
     <ul class="nav">
@@ -47,6 +47,8 @@
           <span class="menu-title">Dashboard</span>
         </a>
       </li>
+
+   
       @canany(['create-user', 'edit-user', 'delete-user'])
       <li class="nav-item menu-items">
         <a class="nav-link" href="{{ route('users.index') }}">
@@ -77,8 +79,9 @@
         </a>
       </li>
       @endcan
-      @canany(['create-product', 'edit-product', 'delete-product','view-product'])
-
+   
+      @can(['create-product', 'edit-product', 'delete-product','view-product' ])
+     
       <li class="nav-item menu-items">
         <a class="nav-link" href="{{ route('products.index') }}">
           <span class="menu-icon">
@@ -87,7 +90,10 @@
           <span class="menu-title">Products</span>
         </a>
       </li>
+
       @endcan
+
+  
       @canany(['create-order', 'edit-order', 'delete-order','view-order'])
 
       <li class="nav-item menu-items">

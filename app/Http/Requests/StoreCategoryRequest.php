@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth; 
-class UpdateCategoryRequest extends FormRequest
+class StoreCategoryRequest extends FormRequest
 {
     protected $user; // Define a property to hold the user instance
 
@@ -26,9 +26,9 @@ class UpdateCategoryRequest extends FormRequest
 
     public function rules()
     {
-        $categoryId=$this->route('category'); 
+        $categoryId=$this->route('category');
         return [
-            'name' => ['required','max:255',Rule::unique('categories','name')->ignore($categoryId)],            
+            'name' => ['required', 'string','max:255',Rule::unique('categories','name')->ignore($categoryId)],           
         ];
     }
  

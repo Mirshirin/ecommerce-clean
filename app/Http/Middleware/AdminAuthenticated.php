@@ -23,30 +23,7 @@ class AdminAuthenticated
             return redirect('/');
 
     }   
-    //     if (Auth::check())
-    //     {
-        
-    //     //     /** @var App\Models\User */
-    //     //     $user= Auth::user();
-    //     //   //  dd( $user->hasRole('Super Admin'));
-    //     //     if  ($user->hasRole(['Super Admin','Admin']) )  {
-        
-
-    //             return $next($request);
-             
-    //         //}
-    //         abort(403);
-    //             //return redirect('/');
-    
-        
-    //     }
-        
-    //    abort(401);
-
-
-    // }
-
-
+   
 
 
  }

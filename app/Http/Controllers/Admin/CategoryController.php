@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Contracts\CategoryRepositoryInterface;
-use Illuminate\Support\Facades\Log;
 
 class CategoryController extends Controller
 {
@@ -30,7 +31,8 @@ class CategoryController extends Controller
     {
         return view('admin.categories.create-category');
     }
-    public function store(UpdateCategoryRequest $request)
+    
+    public function store(StoreCategoryRequest $request)
     {
         try {
             $validatedData = $request->validated();  

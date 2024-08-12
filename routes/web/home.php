@@ -1,14 +1,14 @@
 
 <?php
 
-use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\Admin\ProductController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\ProfileController;
-use App\Models\User;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ProfileController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 
 Route::view('dashboard', 'dashboard')->middleware(['auth', 'verified'])->name('dashboard');
@@ -36,12 +36,17 @@ Route::post('/email/verification-notification', function (Request $request) {
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
 Route::get('/product-detail/{id}', [HomeController::class , 'productDetail'])->name('product-detail');
-Route::post('/add-cart/{id}', [HomeController::class , 'addToCart'])->name('add-cart');
 Route::get('/',[HomeController::class,'homeProducts'])->name('products-index');
-Route::get('/show-carts',[HomeController::class,'showCarts'])->name('show-carts');
-Route::delete('/delete-carts/{id}',[HomeController::class,'deleteCarts'])->name('delete-carts');
-Route::get('/cash-order',[HomeController::class,'cashOrder'])->name('cash-order');
-Route::get('/stripe/{totalPrice}',[HomeController::class,'stripe'])->name('stripe');
-Route::post('stripe/{totalPrice}', [HomeController::class,'stripePost'])->name('stripe.post');
 
+Route::get('/show-carts',[CartController::class,'showCarts'])->name('show-carts');
+Route::post('/add-cart/{id}', [CartController::class , 'addToCart'])->name('add-cart');
+Route::delete('/delete-carts/{id}',[CartController::class,'deleteCarts'])->name('delete-carts');
+
+Route::post('/cash-order',[PaymentController::class,'cashOrder'])->name('cash-order')->middleware('auth');
+Route::match(['get','post'],'/pay-result',[PaymentController::class,'payResult'])->name('pay-result');
+Route::get('/check-cart-status', function () {
+    $isCartEmpty = session()->get('cart') === null || empty(session()->get('cart'));
+    return response()->json(['isCartEmpty' => $isCartEmpty]);
+});
+Route::match(['get','post'],'/payments',[HomeController::class,'payments'])->name('payments');
 require __DIR__.'/../auth.php';

@@ -73,5 +73,13 @@ class RoleRepository implements RoleRepositoryInterface
     {
         return Role::pluck('name')->all();
     }
+    public function getAllPermissionNames(){
 
+        return Permission::pluck('name')->all();
+
+
+
+     
+
+    }
 }

@@ -16,7 +16,7 @@ class Authenticate extends Middleware
      */
     protected function authenticated(Request $request, $user)
 {
-   // dd($user->role === 'Super Admin' );
+   
     if ($user->role === 'Super Admin' || $user->role === 'Admin') {
         return redirect()->route('admin.dashboard');
     }

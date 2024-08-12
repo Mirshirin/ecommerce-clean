@@ -1,0 +1,15 @@
+/* قرار دادن المان‌ها کنار هم با استفاده از Flexbox */
+.continue-shopping-btn,
+.cash-on-delivery-form {
+    display: inline-flex;
+}
+
+/* تنظیم فاصله بین المان‌ها */
+.continue-shopping-btn {
+    margin-right: 10px; /* فاصله از سمت راست */
+}
+
+/* تنظیم عرض فرم برای اطمینان از فضای کافی */
+.cash-on-delivery-form {
+    width: auto; /* یا می‌توانید عرض مشخصی تعیین کنید */
+}

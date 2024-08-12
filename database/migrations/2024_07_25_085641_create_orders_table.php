@@ -19,10 +19,12 @@ return new class extends Migration
             $table->string('phone_number');
             $table->text('address');
             $table->string('product_title');
-            $table->float('price');
+            $table->unsignedBigInteger('price');
             $table->integer('quantity');
             $table->string('image');
-            $table->unsignedBigInteger('product_id');
+            $table->unsignedBigInteger('product_id');            
+            $table->unsignedBigInteger('user_id');                 
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');            
  
             // payment/

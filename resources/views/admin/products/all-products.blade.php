@@ -48,8 +48,12 @@
           @foreach ( $products as $product)
             <tr class="item_type product">
                 <input type="hidden" class="delete_val_id" value="{{ $product->id }}">
-                <td> {{  $product->id }} </td>              
+                <td> {{  $product->id }} </td>   
+                @if (strpos($product->image,'http') !== false)
+                <td>  <img src="{{ $product->image }}" alt="{{ $product->title }}"> </td>
+                @else    
                 <td>  <img src="{{ asset('productImage/'. $product->image) }}" alt="{{ $product->title }}"> </td>
+                @endif           
                 <td> {{ $product->title }}</td>
                 <td> {{ $product->description }}</td>
                 <td> {{ $product->price }}</td>

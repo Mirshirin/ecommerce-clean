@@ -26,8 +26,9 @@ class UpdateProductRequest extends FormRequest
      */
     public function rules()
     {
+        $productId=$this->route('product');
         return [
-            'title' => ['required','string','max:255','unique:products,title'],
+            'title' => ['required','string','max:255',Rule::unique('products','title')->ignore($productId)],
             'description' => ['required','string','max:255'],
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Image validation rules
             'discount_price' => ['nullable', 'numeric'],
