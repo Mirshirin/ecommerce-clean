@@ -10,6 +10,7 @@
                       <tr>
                         <th>Product Title</th>
                         <th>Product Quantity</th>
+                        <th>dicount</th>
                         <th>Price</th>
                         <th>Image</th>
                         <th>Action</th>
@@ -26,7 +27,8 @@
                                 <tr>                                   
                                     <td>{{ $cartProduct['product_title'] }}</td>   
                                     <td>{{ $cartProduct['quantity'] }}</td>   
-                                    <td>{{ $cartProduct['price'] }}</td>   
+                                    <td>{{ $cartProduct['code'] }}</td>  
+                                    <td>{{ $cartProduct['price']-(($cartProduct['price'] * $cartProduct['code']) / 100 )  }}</td>   
                                     <td>  <img src="{{  $cartProduct['image'] }}"  style="width:50px" class="img-responsive"></td>  
                                     
                                     <form action="{{ route('delete-carts', $id) }}" method="post">
@@ -37,7 +39,7 @@
                                 </tr>                            
                          
                                 @php
-                                $totalPrice += $cartProduct['price']* $cartProduct['quantity'];
+                                $totalPrice += $cartProduct['price']-(($cartProduct['price'] * $cartProduct['code']) / 100 ) * $cartProduct['quantity'];
                                 $totalProduct +=$cartProduct['quantity'];
                                 @endphp 
                        
@@ -49,24 +51,18 @@
                             <td>${{ $totalPrice }} total</td>
                             <!-- <td><big>total</td> -->
                             <td></td>
+
+                            <td></td>
                             <td></td>
                         </tr> 
-                        </tbody>
+                    </tbody>
    
-                 
+                </table>
+                    <h1 style="font-size: 20px; font-weight:700;">Proceed to order</h1>
+                    <a href="{{ url('/') }}" class="btn btn-danger continue-shopping-btn">Continue Shopping</a>
+                    <a href="{{ route('checkout') }}" class="btn btn-danger continue-shopping-btn">Proceed to Checkout</a>           
                     
-                  </table>
-                  <h1 style="font-size: 20px; font-weight:700;">Proceed to order</h1>
-                  <a href="{{ url('/') }}" class="btn btn-danger continue-shopping-btn">Continue Shopping</a>
-           
-                  <form id="cash_on_delivery" class="form-inline cash-on-delivery-form" method="POST" action="{{ route('cash-order') }}"   >
-                  @csrf   
-                        <input type="hidden" name="orderMethod" value="Cash on Delivery">
-                        <button type="submit" class="btn btn-danger"  >Cash on Delivery</button>
-                  </form>
-                  
-                 
-                </div>
+                
                 
             </div>  
         </div>

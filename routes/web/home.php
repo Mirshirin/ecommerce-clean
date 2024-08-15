@@ -42,11 +42,15 @@ Route::get('/show-carts',[CartController::class,'showCarts'])->name('show-carts'
 Route::post('/add-cart/{id}', [CartController::class , 'addToCart'])->name('add-cart');
 Route::delete('/delete-carts/{id}',[CartController::class,'deleteCarts'])->name('delete-carts');
 
-Route::post('/cash-order',[PaymentController::class,'cashOrder'])->name('cash-order')->middleware('auth');
+// Route::post('/payment',[PaymentController::class,'payment'])->name('payment')->middleware('auth');
+Route::get('/checkout',[PaymentController::class,'checkout'])->name('checkout')->middleware('auth');
+Route::get('/thanks/{orderId}',[PaymentController::class,'thankyou'])->name('thankyou');
+Route::post('/processCheckout',[PaymentController::class,'processCheckout'])->name('processCheckout');
 Route::match(['get','post'],'/pay-result',[PaymentController::class,'payResult'])->name('pay-result');
+
 Route::get('/check-cart-status', function () {
     $isCartEmpty = session()->get('cart') === null || empty(session()->get('cart'));
     return response()->json(['isCartEmpty' => $isCartEmpty]);
 });
-Route::match(['get','post'],'/payments',[HomeController::class,'payments'])->name('payments');
+//Route::match(['get','post'],'/payments',[HomeController::class,'payments'])->name('payments');
 require __DIR__.'/../auth.php';

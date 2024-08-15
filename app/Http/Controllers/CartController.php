@@ -36,6 +36,7 @@ class CartController extends Controller
                 'product_title' => $product->title,
                 'price' => $product->price,
                 'image' => $product->image,
+                'code'  => $product->discount_price,
                 'quantity' => 1,
                 'user_id' => $user->id,
                 'product_id' => $product->id,
@@ -43,7 +44,7 @@ class CartController extends Controller
         }
        
           session()->put('cart', $cart);
-         
+        
         return redirect()->back()->with('success', '');
 
     }else  {

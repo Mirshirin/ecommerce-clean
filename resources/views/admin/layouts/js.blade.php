@@ -11,14 +11,7 @@
       }
     });
 
-    @if (session('message'))  
-        swal({  
-        title: "{{  session('message') }} ",
-        icon: "success",
-        button: "ok",
-          });
-    @endif
-  
+    
     // Function to handle deletion
     function deleteItem(delete_id, itemType) {
       swal({
@@ -67,7 +60,14 @@
 
   
 </script>
-
+@if (session('message'))  
+        swal({  
+        title: "{{  session('message') }} ",
+        icon: "success",
+        button: "ok",
+          });
+    @endif
+  
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js" ></script>
 <!-- <script>
       $('#frm').validate({

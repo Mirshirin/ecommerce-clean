@@ -28,7 +28,7 @@
                 </li>              
                 @endcan
                <div class="dropdown">
-               <button id="dLabel" type="button"  class="dropdown-toggle" data-bs-toggle="dropdown"  style="margin-right: 10px;">
+               <button id="dLabel" type="button"  class="dropdown-toggle" data-bs-toggle="dropdown"  style="margin-right: 10px;">     
                <i class="fa fa-shopping-cart" aria-hidden="true"></i>Cart <span class="badge bg-danger">{{ count((array) session('cart')) }}</span>
                </button>
              
