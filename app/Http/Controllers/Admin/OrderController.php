@@ -9,15 +9,17 @@ class OrderController extends Controller
 {
     
     protected $orderRepository;
-
+ 
     public function __construct(OrderRepositoryInterface $orderRepository)
     {
         $this->orderRepository = $orderRepository;
     }
 
     public function  index(){
+        
         $orders = $this->orderRepository->getAllOrders();
-        return view('orders.all-orders', compact('orders'));
+       
+        return view('admin.orders.all-orders', ['orders' => $orders ]);
     }
 
     public function  delivered($id){

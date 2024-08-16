@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
+
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateProductRequest;
-use Illuminate\Pagination\LengthAwarePaginator;
 use App\Contracts\ProductRepositoryInterface;
 
 class ProductController extends Controller
@@ -14,8 +13,7 @@ class ProductController extends Controller
 
     public function __construct(ProductRepositoryInterface $productRepository)
     {
-        $this->productRepository = $productRepository;
-     
+        $this->productRepository = $productRepository;     
     }
 
     public function index()

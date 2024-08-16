@@ -11,7 +11,7 @@ class CartController extends Controller
        
     public function showCarts(Request $request ){
         if(Auth::id()){
-            $id = Auth::user()->id;
+         
             $cart=$request->session()->has('cart') ? $request->session()->get('cart') : null;
             
             return view('home.cart.show-carts')->with('cartProducts',$cart);
@@ -50,17 +50,7 @@ class CartController extends Controller
     }else  {
         return redirect('login');
     }
-   
-        // $cart_products = collect(request()->session()->get('cart'));
-        // $cart_total = 0;
-        // foreach ($cart_products as $key => $product) {
-            
-        //     $cart_total+= $product['quantity'] * $product['discount_price'];
-        // }
-
-        // $renderHTML = view('frontend.cart.mini-cart-render',compact('cart_products','cart_total'))->render();
-        // $total_products_count = count(request()->session()->get('cart'));
-        // return response()->json(['renderHTML'=>$renderHTML,'total_products_count'=>$total_products_count],200);
+       
     }
  
     public function  deleteCarts(Request $request){

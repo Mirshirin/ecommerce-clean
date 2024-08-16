@@ -46,7 +46,7 @@ Route::delete('/delete-carts/{id}',[CartController::class,'deleteCarts'])->name(
 Route::get('/checkout',[PaymentController::class,'checkout'])->name('checkout')->middleware('auth');
 Route::get('/thanks/{orderId}',[PaymentController::class,'thankyou'])->name('thankyou');
 Route::post('/processCheckout',[PaymentController::class,'processCheckout'])->name('processCheckout');
-Route::match(['get','post'],'/pay-result',[PaymentController::class,'payResult'])->name('pay-result');
+// Route::match(['get','post'],'/pay-result',[PaymentController::class,'payResult'])->name('pay-result');
 
 Route::get('/check-cart-status', function () {
     $isCartEmpty = session()->get('cart') === null || empty(session()->get('cart'));

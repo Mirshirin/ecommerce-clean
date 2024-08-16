@@ -17,9 +17,12 @@
     <h3> {{ $order->product_title }}</h3>
     <h3> {{ $order->quantity }}</h3>
     <h3> {{ $order->price }}</h3>
-    <div>
-        <img src="{{ $order->image }}" >
-
+    <div>  
+    @if (strpos($order->image,'http') !== false)
+        <img src="{{ $order->image }}" alt="{{  $order->product_title }}"> 
+    @else    
+        <img src="{{ 'productImage/'. $order->image }}" alt="{{ $order->product_title  }}"> 
+    @endif  
     </div>
   
 </body>

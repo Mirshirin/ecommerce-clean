@@ -1,4 +1,9 @@
+
+
+
+
 @component('admin.layouts.content')
+
 <div class="col-lg-12 grid-margin stretch-card">
   <div class="card">
 
@@ -15,24 +20,24 @@
               <th>Name </th>
               <th>Email </th>              
               <th>Phone </th>
-              <th>Product |Title </th>              
+              <th>Product Title </th>              
               <th>Quantity </th>                          
               <th>Payment status </th>
               <th>Delivery status </th>  
-              <th>Delivered</th>  
+              <th>Final Status</th>  
               <th>print pdf</th>  
             </tr>
           </thead>
           <tbody>
-           <?php
-             $id=auth()->user()->id;
-           ?>
-            @foreach ($orders as $order)
-          
-            @if ($order->user_id == $id)
+
+            @foreach ($orders as $order) 
                 <tr>
                     <td> {{  $order->id }} </td>   
-                    <td>  <img src="/productImage/{{ $order->image }}" alt="{{ $order->title }}"> </td>
+                    @if (strpos($order->image,'http') !== false)
+                      <td>  <img src="{{ $order->image }}" alt="{{  $order->product_title }}"> </td>
+                    @else    
+                      <td>  <img src="{{ asset('productImage/'. $order->image) }}" alt="{{ $order->product_title  }}"> </td>
+                    @endif   
                     <td> {{  $order->name }} </td> 
                     <td> {{  $order->email }} </td> 
                     <td> {{  $order->phone_number }} </td> 
@@ -40,19 +45,14 @@
                     <td> {{  $order->quantity }} </td> 
                     <td> {{  $order->payment_status }} </td> 
                     <td> {{  $order->delivery_status }} </td> 
-                    @if ($order->delivery_status == 'processing')
-                        <td> 
-                            <a href=" {{  route('delivered',$order->id) }}" class="btn btn-sm btn-info">Delivered</a>
-                        </td> 
-                    @else
-                     <td style="color: green ;"> Delivered </td>   
-                      
-                    @endif
+                    <td> 
+                        <a href=" " class="btn btn-sm btn-info">{{$order->delivery_status}}</a>
+                    </td>               
                     <td> 
                         <a href=" {{  route('print-pdf',$order->id) }}" class="btn btn-sm btn-success">Print pdf</a>
                     </td> 
                 </tr>
-            @endif
+         
         @endforeach
         
           </tbody>

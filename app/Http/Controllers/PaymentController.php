@@ -124,7 +124,7 @@ class PaymentController extends Controller
     }
     public function thankyou($id)
     {
-        return view('orders.thankyou',[
+        return view('admin.orders.thankyou',[
             'id' => $id,
         ]);
     }
