@@ -11,7 +11,7 @@ use App\Contracts\ProductRepositoryInterface;
 
 class ProductRepository implements ProductRepositoryInterface
 {
-    public function getAllProducts(int $perPage = 7)
+    public function getAllProducts(int $perPage = 6)
     {
         return Product::paginate($perPage);
     }

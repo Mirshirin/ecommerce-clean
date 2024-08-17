@@ -1,6 +1,4 @@
 @component('admin.layouts.content')
-
-
 <div class="col-12 grid-margin stretch-card">
   <div class="card">
       <div class="card-body">
@@ -9,7 +7,7 @@
             @csrf
           <label class="sr-only-visible" for="inlineFormInputName2">Name</label>
           <input type="text" class="form-control mb-2 mr-sm-2 @error('name') is-invalid @enderror" name="name"   placeholder="Enter category name" style= "background-color:white !important; color: black;" >
-          @error('name')
+            @error('name')
             <span class="text-danger">{{ $message }}</span>
             <br>
             @enderror
@@ -19,3 +17,4 @@
   </div>
 </div>
 @endcomponent
+

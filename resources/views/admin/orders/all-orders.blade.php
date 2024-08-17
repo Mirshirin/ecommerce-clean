@@ -59,6 +59,12 @@
         </table>
       </div>
     </div>
+    <div class="note">
+    <div class="note-body">
+      {{ $orders->links() }}
+    </div>
+  </div>
+  
   </div>
 </div>
 @endcomponent

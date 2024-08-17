@@ -35,8 +35,10 @@ class CategoryController extends Controller
     public function store(StoreCategoryRequest $request)
     {
         try {
+          
             $validatedData = $request->validated();  
             $category = app(CategoryRepositoryInterface::class)->createCategory($validatedData);
+           // session()->flash('statuscode','success');
             return redirect()->route('categories.index', $category)->with('message', 'Category was created');
         } catch (\Exception $e) {
             // Log the exception

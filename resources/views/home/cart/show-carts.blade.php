@@ -61,12 +61,33 @@
                     <h1 style="font-size: 20px; font-weight:700;">Proceed to order</h1>
                     <a href="{{ url('/') }}" class="btn btn-danger continue-shopping-btn">Continue Shopping</a>
                     <a href="{{ route('checkout') }}" class="btn btn-danger continue-shopping-btn">Proceed to Checkout</a>           
-                    
-                
-                
+               
             </div>  
         </div>
     </section>
 @endsection
-
-
+@section('customJS')
+    <script>
+        $(document).ready(function(){
+            $.ajax({
+                type: "get",
+                url: "{{ route('checkout') }}",
+                dataType: "json",
+                success: function (response) {
+                        if(response.status) {
+                            // Display the success message using SweetAlert
+                            Swal.fire({
+                                icon: 'success',
+                                title: '',
+                                text: response.message,
+                                confirmButtonText: 'OK'
+                                    }).then(() => { // Use then() to wait for the modal to close         // Thank you in reponse
+                                        window.location.href = "{{ url('products-index/') }}/" + response.orderId; // Redirect after the modal closes
+                                    });
+                        } 
+          
+                }
+            });
+        });
+    </script>
+@endsection

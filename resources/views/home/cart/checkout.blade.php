@@ -18,7 +18,7 @@
     <div class="alert alert-success">
         {{ session('message') }}
     </div>
-@endif
+    @endif
 
         <form action="{{ route('processCheckout') }}" method="post" id="orderForm" name="orderForm">
         @csrf

@@ -17,12 +17,13 @@ class PaymentController extends Controller
     public function checkout(Request $request)
     {
         $cart=$request->session()->has('cart') ? $request->session()->get('cart') : null;        
-
+       
         $user = Auth::user();
         if (empty($cart)) {
          
-            return redirect()->route('products-index')->with('error', 'سبد خرید شما خالی است. لطفاً محصولاتی را به سبد اضافه کنید.');
+            return redirect()->route('products-index')->with('message', 'سبد خرید شما خالی است. لطفاً محصولاتی را به سبد اضافه کنید.');
         } 
+     
         // Condition based on If User is not logged and click on to (addToCart) Button then redirect to login page
         if(Auth::check() == false)
         {
@@ -32,7 +33,7 @@ class PaymentController extends Controller
     }
     public function processCheckout(Request $request)
     {
-     
+    
         $cart=$request->session()->has('cart') ? $request->session()->get('cart') : null;        
         
         // Step -1 Apply validation

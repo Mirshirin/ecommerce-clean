@@ -13,16 +13,7 @@ class OrderReportController extends Controller
   {
       $this->pdf = $pdf;
   }
-
-  // public function printPdf($id){
-  //     $order = Order::find($id);    
-  //     //$filename = (string)($id);
-  //     $pdf = PDF::setPaper('a4', 'portrait')->loadView('admin.report.pdf', compact('order'))->save(storage_path('/dir') . '/' . 'orders_detail.pdf');
-
-  //    // return $pdf->download($filename.'.pdf');
-  //     return $pdf->download('orders_detail.pdf');
-  // }
-
+ 
   public function printPdf($id)
   {
     $order = Order::find($id);
@@ -30,9 +21,7 @@ class OrderReportController extends Controller
     $filename = (string)$id;
     $pdf = PDF::setPaper('a4', 'portrait')
                ->loadView('admin.report.pdf', compact('order'))
-               ->save(storage_path('dir/' . $filename . '.pdf')); // Adjusted storage path
-
-    // Use the dynamic filename for downloading
+               ->save(storage_path('dir/' . $filename . '.pdf')); // Adjusted storage path    
     return $pdf->download($filename . '.pdf');
     
   }
