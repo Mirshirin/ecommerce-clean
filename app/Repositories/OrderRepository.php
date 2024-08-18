@@ -25,4 +25,10 @@ class OrderRepository implements OrderRepositoryInterface
         ]);
         return $order;
     }
+    public function createOrder(array $data)
+    {
+        return  Order::create($data);
+                
+    }
+
 }

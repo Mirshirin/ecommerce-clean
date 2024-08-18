@@ -5,6 +5,7 @@ use App\Models\Role;
 use App\Repositories\RoleRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\OrderRepository;
+use App\Repositories\PaymentRepository;
 use App\Repositories\ProductRepository;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\CategoryRepository;
@@ -12,10 +13,11 @@ use App\Contracts\RoleRepositoryInterface;
 use App\Contracts\UserRepositoryInterface;
 use App\Repositories\PermissionRepository;
 use App\Contracts\OrderRepositoryInterface;
+use App\Contracts\PaymentRepositoryInterface;
 use App\Contracts\ProductRepositoryInterface;
 use App\Contracts\CategoryRepositoryInterface;
-use App\Contracts\PermissionRepositoryInterface;
 use Illuminate\Auth\Notifications\VerifyEmail;
+use App\Contracts\PermissionRepositoryInterface;
 use Illuminate\Notifications\Messages\MailMessage;
 
 class AppServiceProvider extends ServiceProvider
@@ -27,6 +29,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->bind(PaymentRepositoryInterface::class, PaymentRepository::class);
         $this->app->bind(OrderRepositoryInterface::class, OrderRepository::class);
         $this->app->bind(CategoryRepositoryInterface::class, CategoryRepository::class);
         $this->app->bind(ProductRepositoryInterface::class, ProductRepository::class);

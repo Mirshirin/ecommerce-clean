@@ -41,8 +41,6 @@ class CategoryController extends Controller
            // session()->flash('statuscode','success');
             return redirect()->route('categories.index', $category)->with('message', 'Category was created');
         } catch (\Exception $e) {
-            // Log the exception
-            Log::error("Failed to create category: {$e->getMessage()}");
     
             // Return a response with an error message
             return back()->withErrors(['message' => 'There was an error creating the category. Please try again.'])->withInput();
@@ -64,8 +62,7 @@ class CategoryController extends Controller
             return redirect()->route('categories.index', $category)->with('message', 'Category was updated');
         } catch (\Exception $e) {
             // Log the exception for debugging purposes
-            Log::error("Failed to update category: {$e->getMessage()}");
-            
+            Log::error("Failed to update category: {$e->getMessage()}");            
             // Return a response with an error message
             return back()->withErrors(['message' => 'There was an error updating the category. Please try again.'])->withInput();
         }
@@ -79,10 +76,7 @@ class CategoryController extends Controller
             $response->delete();
             return response()->json([ 'status' => 'category deleted successfully' ], 200);
         } catch (\Exception $e) {
-            // Log the exception
-            //jLog::error("Failed to delete category: {$e->getMessage()}");
-    
-            // Return a response with an error message
+     
             return response()->json(['error' => 'There was an error deleting the category.'], 500);
         }
     }

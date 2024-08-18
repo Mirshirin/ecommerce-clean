@@ -74,15 +74,19 @@
                 url: "{{ route('checkout') }}",
                 dataType: "json",
                 success: function (response) {
-                        if(response.status) {
+                        if(response.status === false) {
                             // Display the success message using SweetAlert
                             Swal.fire({
-                                icon: 'success',
-                                title: '',
+                                icon: 'warning',
+                                title: 'oops',
                                 text: response.message,
                                 confirmButtonText: 'OK'
-                                    }).then(() => { // Use then() to wait for the modal to close         // Thank you in reponse
-                                        window.location.href = "{{ url('products-index/') }}/" + response.orderId; // Redirect after the modal closes
+                                    }).then((result) => { 
+                                     
+                                          
+                                            window.location.href = "{{ url('/') }}/" ; // Redirect after the modal closes
+
+                                        
                                     });
                         } 
           

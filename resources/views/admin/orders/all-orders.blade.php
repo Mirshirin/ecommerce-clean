@@ -45,9 +45,8 @@
                     <td> {{  $order->quantity }} </td> 
                     <td> {{  $order->payment_status }} </td> 
                     <td> {{  $order->delivery_status }} </td> 
-                    <td> 
-                        <a href=" " class="btn btn-sm btn-info">{{$order->delivery_status}}</a>
-                    </td>               
+                    <td> {{  $order->delivery_status }} </td> 
+                              
                     <td> 
                         <a href=" {{  route('print-pdf',$order->id) }}" class="btn btn-sm btn-success">Print pdf</a>
                     </td> 

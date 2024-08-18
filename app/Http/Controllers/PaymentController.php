@@ -6,28 +6,51 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\PaymentOrder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use App\Contracts\OrderRepositoryInterface;
+use App\Contracts\PaymentRepositoryInterface;
+use App\Contracts\ProductRepositoryInterface;
 
 
 class PaymentController extends Controller
 {
+    protected $orderRepository;
+    protected $productRepository;
+    protected $paymentRepository;
 
+ 
+    public function __construct(
+        OrderRepositoryInterface $orderRepository ,
+        ProductRepositoryInterface $productRepository,
+        PaymentRepositoryInterface $paymentRepository,
+        )
+    {
+        $this->orderRepository = $orderRepository;
+        $this->productRepository = $productRepository;  
+        $this->paymentRepository = $paymentRepository;  
+
+    }
     public function checkout(Request $request)
     {
-        $cart=$request->session()->has('cart') ? $request->session()->get('cart') : null;        
-       
+        $cart=$request->session()->has('cart') ? $request->session()->get('cart') : null;   
         $user = Auth::user();
         if (empty($cart)) {
          
-            return redirect()->route('products-index')->with('message', 'سبد خرید شما خالی است. لطفاً محصولاتی را به سبد اضافه کنید.');
-        } 
+            return response()->json([
+                 'status' => false,
+                 'message'=> 'سبد خرید شما خالی است. لطفاً محصولاتی را به سبد اضافه کنید.',
+            ]);
+        }         
      
-        // Condition based on If User is not logged and click on to (addToCart) Button then redirect to login page
-        if(Auth::check() == false)
+        if(!Auth::check() )
         {
-            return redirect()->route('login');
+            return response()->json([
+                'status' => false,
+                'redirect' => route('ligin'),
+                'message' => 'لطفا برای ادامه وارد حساب کاربری خود شوید ',
+            ]);
         }
         return view('home.cart.checkout',['user' => $user]);
     }
@@ -62,7 +85,7 @@ class PaymentController extends Controller
                 $totalAmount = 0;   
                 foreach ($cart as $productId => $product) 
                 {
-                    $order= Order::create([
+                    $orderData= [
                         'name'=>$product['name'],
                         'email'=>$product['email'],
                         'phone_number'=> $product['phone_number'],
@@ -74,18 +97,15 @@ class PaymentController extends Controller
                         'product_id'=> $product['product_id'],
                         'payment_status'=> 'not paid',  
                         'delivery_status'=>'pending',    
-                    ]);
-                   
-
-                    if ($product['code']!=0)
-                        $discountprice = $product['price']-($product['price'] * $product['code']) / 100;
-                    else{
-                        $discountprice = $product['price'];
-                    }
+                    ];
+                    $order = $this->orderRepository->createOrder($orderData);
+                    $discountprice = $product['code']!=0
+                                   ? $product['price']-($product['price'] * $product['code']) / 100 : $product['price'];
+                 
                     $totalAmount += $discountprice * $product['quantity']; // محاسبه مجموع قیمت کل سفارش
                     $totalAmount = number_format($totalAmount, 2, '.', '');
 
-                    $productData = Product::find($product['product_id']);
+                    $productData = $this->productRepository->getProductById($product['product_id']);
                     if($productData->quantity == 'Yes')
                     {
                         $currentQty = $productData->quantity;
@@ -97,19 +117,18 @@ class PaymentController extends Controller
                 }
            
         
-                $payment = PaymentOrder::create([
+                $paymentData =[
                     'user_id' => auth()->id(),
                     'order_id' => $order->id,
                     'amount_paid' => $totalAmount,
                     'payment_date' => now(),
-                ]);
-        
+                ];
+                $payment= $this->paymentRepository->createPayment( $paymentData );
              
                 // Send Order Email
                // orderEmail($order->id,'customer');
 
                session()->flash('success','');
-
                Session()->forget('code');
                Session::put('cart', []);
 
