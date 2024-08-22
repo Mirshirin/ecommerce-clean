@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\PaymentOrder;
+use App\Mail\OrderEmail;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -56,14 +58,14 @@ class PaymentController extends Controller
     }
     public function processCheckout(Request $request)
     {
-    
+   
         $cart=$request->session()->has('cart') ? $request->session()->get('cart') : null;        
         
         // Step -1 Apply validation
         $validator = Validator::make($request->all(),[
             'name' => 'required|min:3',
             'email' => 'required|email',
-            'address' => 'required|min:15',           
+            'address' => 'required|min:10',           
             'phone' => 'required',
         ]);
        
@@ -124,11 +126,12 @@ class PaymentController extends Controller
                     'payment_date' => now(),
                 ];
                 $payment= $this->paymentRepository->createPayment( $paymentData );
-             
-                // Send Order Email
-               // orderEmail($order->id,'customer');
-
-               session()->flash('success','');
+      
+               //orderEmail($order->id,'customer'); 
+       
+       $emailController= new EmailController();
+       $emailController->sendEmails($order);
+        session()->flash('success','');
                Session()->forget('code');
                Session::put('cart', []);
 

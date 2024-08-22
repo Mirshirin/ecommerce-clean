@@ -153,9 +153,10 @@ class UserController extends Controller
         $user = User::findOrFail($user->id);   
            
         Log::info('Entering update method'); // Log entering the method
-        $validatedData = $request->all(); 
-   
-        if ($request->has('verify') && $user->markEmailAsVerified())
+        //$validatedData = $request->all(); 
+        $validatedData = $request->validated();  
+
+        if ($request->has('verify') && !$user->hasVerifiedEmail())
         {
             Log::info('Marking email as verified', ['user_id' => $user->id]); // Log email verification
             $user->markEmailAsVerified();
@@ -175,6 +176,8 @@ class UserController extends Controller
             // Hash the password
             $validatedData['password'] = $validatedData['password'];
         }
+        //try{
+         // dd($request->all());
         $user = app(UserRepositoryInterface::class)->update($validatedData,$user->id); 
         if ($request->has('roles')) {
             $user->roles()->detach();
@@ -192,6 +195,11 @@ class UserController extends Controller
            }               
         }
         return redirect()->route('users.index')->with('message','user was updated.');
+    //   } catch (\Exception $e){
+    //     Log::info('catching '); 
+
+    //     return redirect()->back()->withErrors(['error' => 'faield to update user, please try again later']);
+    //   }
     }   
 
     public function destroy($id)

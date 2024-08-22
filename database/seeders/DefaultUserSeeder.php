@@ -19,6 +19,8 @@ class DefaultUserSeeder extends Seeder
         $superAdmin = User::create([
             'name' => 'Shirin', 
             'email' => 'mirshirin8353@gmail.com',
+            'phone' => '09127196483',
+            'address' => 'Tehran , Azadi,Seconed Bimeh, forth allay, NO4',
             'password' => Hash::make('123456789'),
             'email_verified_at' => now(),
             'remmeber_token' => Str::random(10)
@@ -29,6 +31,8 @@ class DefaultUserSeeder extends Seeder
         $admin = User::create([
             'name' => 'Omid', 
             'email' => 'omid@gmail.com',
+            'phone' => '09127196483',
+            'address' => 'Tehran , Azadi,Seconed Bimeh, forth allay, NO4',
             'password' => Hash::make('123456789'),
             'email_verified_at' => now(),
             'remmeber_token' => Str::random(10)
@@ -41,6 +45,8 @@ class DefaultUserSeeder extends Seeder
         $productManager = User::create([
             'name' => 'Aria', 
             'email' => 'aria@codeme.com',
+            'phone' => '09127196483',
+            'address' => 'Tehran , Azadi,Seconed Bimeh, forth allay, NO4',
             'password' => Hash::make('123456789'),
             'email_verified_at' => now(),
             'remmeber_token' => Str::random(10)
@@ -52,6 +58,8 @@ class DefaultUserSeeder extends Seeder
         $user = User::create([
             'name' => 'shohreh', 
             'email' => 'shohreh@codeme.com',
+            'phone' => '09127196483',
+            'address' => 'Tehran , Azadi,Seconed Bimeh, forth allay, NO4',
             'password' => Hash::make('123456789'),
             'email_verified_at' => now(),
             'remmeber_token' => Str::random(10)

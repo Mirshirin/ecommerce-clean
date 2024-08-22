@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\EmailController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -34,6 +35,7 @@ Route::post('/email/verification-notification', function (Request $request) {
  
     return back()->with('message', 'Verification link sent!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+// Route::get('/send-mail', [EmailController::class , 'sendEmails'])->name('sendEmails');
 
 Route::get('/product-detail/{id}', [HomeController::class , 'productDetail'])->name('product-detail');
 Route::get('/',[HomeController::class,'homeProducts'])->name('products-index');

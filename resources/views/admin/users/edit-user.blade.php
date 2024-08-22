@@ -1,5 +1,13 @@
 @component('admin.layouts.content')
-
+@if ($errors->any())
+    <div class="alret alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+            <li> {{ $error }} </li>
+            @endforeach
+        </ul>
+    </div>
+@endif    
 <div class="col-12 grid-margin stretch-card">
   <div class="card">
     <div class="card-body">
@@ -28,9 +36,17 @@
             <input type="password" class="form-control mb-2 mr-sm-2" id="password_confirmation" name="password_confirmation"  value="{{ old('password_confirmation', isset($user) ? $user->password : '') }}"   placeholder="Enter Password confirmation" style= "background-color:white !important; color: black;" >
            
            <label class="sr-only-visible" for="phone">Phone No.</label>
-            <input type="text" class="form-control mb-2 mr-sm-2" id="phone" name="phone" value="{{ old('phone', $user->phone) }}" style= "background-color:white !important; color: black;" >
+            <input type="text" class="form-control mb-2 mr-sm-2  @error('phone') is-invalid @enderror" id="phone" name="phone" value="{{ old('phone', $user->phone) }}" style= "background-color:white !important; color: black;" >
+            @error('phone')
+                <span class="text-danger">{{ $message }}</span>
+                <br>
+            @enderror
             <label class="sr-only-visible" for="address">address</label>
-            <input type="text" class="form-control mb-2 mr-sm-2" id="address" name="address" placeholder="Enter address" value="{{ old('address', $user->address) }}" style= "background-color:white !important; color: black;" >
+            <input type="text" class="form-control mb-2 mr-sm-2 @error('address') is-invalid @enderror" id="address" name="address" placeholder="Enter address" value="{{ old('address', $user->address) }}" style= "background-color:white !important; color: black;" >
+            @error('address')
+                <span class="text-danger">{{ $message }}</span>
+                <br>
+            @enderror
             @if (! $user->hasVerifiedEmail())
             <label class="sr-only-visible" for="verify">User Verification</label>
             <input type="checkbox" class="form-check-input" id="verify" name="verify" > 
@@ -38,7 +54,7 @@
                 <br>
                 <div class="mb-3 row">
                 <label for="roles" class=" sr-only-visible">Roles</label>
-                <div class="col-md-4"> 
+                <div class="col-md-4">   
                 <select class="form-select @error('roles') is-invalid @enderror" multiple aria-label="Roles" id="roles" name="roles[]">
                 @forelse ($roles as $role)
 

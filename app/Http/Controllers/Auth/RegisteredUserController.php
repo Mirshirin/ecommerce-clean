@@ -43,7 +43,7 @@ class RegisteredUserController extends Controller
             'address' => $request->address,
             'password' => $request->password,
         ]);
-
+        $user->sendEmailVerificationNotification();
         event(new Registered($user));
 
         Auth::login($user);

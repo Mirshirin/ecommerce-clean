@@ -22,8 +22,7 @@ class UserRepository implements UserRepositoryInterface
     }
 
     public function store(array $data)
-    { 
-        
+    {        
 
          return User::create([
             'name' => $data['name'],
@@ -45,7 +44,7 @@ class UserRepository implements UserRepositoryInterface
 
     public function update(array $data,$id)
     {
-    
+      // dd($data);
         $user= User::find($id); 
         $user->update([
             'name' => $data['name'],

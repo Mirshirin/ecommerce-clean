@@ -34,8 +34,8 @@ class StoreUserRequest extends FormRequest
         //    'email' => 'required|string|email:rfc,dns|max:250|unique:users,email',
             'email' => 'required|string|email|max:250|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'phone' => 'nullable|string|max:255',
-            'address' => 'nullable|string|max:255',
+            'phone' => 'required|string|max:255',
+            'address' => 'required|string|max:255|min:10',
             'roles' => 'required|array',
            
            
