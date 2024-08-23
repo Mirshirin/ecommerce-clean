@@ -9,16 +9,17 @@ use App\Policies\UserPolicy;
 use App\Support\UserController;
 
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Traits\HasRoles;
+use App\Models\Relations\UserRelations;
 use Illuminate\Database\Eloquent\Model;
+
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Collection;
-
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use League\CommonMark\Extension\CommonMark\Node\Inline\Link;
-use App\Models\Relations\UserRelations;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -62,7 +63,7 @@ class User extends Authenticatable implements MustVerifyEmail
    
 
     public function setPasswordAttribute($value){
-        return $this->attributes['password']=bcrypt($value);
+        return $this->attributes['password']=Hash::make($value);
     }
 
     

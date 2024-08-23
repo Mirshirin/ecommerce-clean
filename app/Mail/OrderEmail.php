@@ -14,7 +14,7 @@ class OrderEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    //public $mailData;
+
     public $mailmessage;
     public $subject;
     public $orderDetails;
@@ -39,10 +39,7 @@ class OrderEmail extends Mailable
     public function envelope()
     {
         return new Envelope(
-            // from: new Address('mirshirin83@gmail.com', 'Programing Field'),
-            // replyTo:[
-            //     new Address('mirshirin83@gmail.com','Programing Field')
-            // ], 
+       
             subject:  $this->subject,
         );
     }

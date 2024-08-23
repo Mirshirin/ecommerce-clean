@@ -13,6 +13,7 @@ class DefaultUserSeeder extends Seeder
     /**
      * Run the database seeds.
      */
+    //password=$2y$10$sEVQw4EaG29wfNGB8lXxDuQse/LIQsv3GbQZZfSa9cAjJb7zPCBem ==123456789
     public function run(): void
     {
         // Creating Super Admin User
@@ -21,21 +22,21 @@ class DefaultUserSeeder extends Seeder
             'email' => 'mirshirin8353@gmail.com',
             'phone' => '09127196483',
             'address' => 'Tehran , Azadi,Seconed Bimeh, forth allay, NO4',
-            'password' => Hash::make('123456789'),
+            'password' => '$2y$10$sEVQw4EaG29wfNGB8lXxDuQse/LIQsv3GbQZZfSa9cAjJb7zPCBem',
             'email_verified_at' => now(),
-            'remmeber_token' => Str::random(10)
+            'remember_token' => Str::random(10)
         ]);
         $superAdmin->assignRole('Super Admin');
 
         // Creating Admin User
         $admin = User::create([
             'name' => 'Omid', 
-            'email' => 'omid@gmail.com',
+            'email' => 'o.arvand8@gmail.com',
             'phone' => '09127196483',
             'address' => 'Tehran , Azadi,Seconed Bimeh, forth allay, NO4',
-            'password' => Hash::make('123456789'),
+            'password' => '$2y$10$sEVQw4EaG29wfNGB8lXxDuQse/LIQsv3GbQZZfSa9cAjJb7zPCBem',
             'email_verified_at' => now(),
-            'remmeber_token' => Str::random(10)
+            'remember_token' => Str::random(10)
 
 
         ]);
@@ -44,12 +45,12 @@ class DefaultUserSeeder extends Seeder
         // Creating Product Manager User
         $productManager = User::create([
             'name' => 'Aria', 
-            'email' => 'aria@codeme.com',
+            'email' => 'mirshirin83@gmail.com',
             'phone' => '09127196483',
             'address' => 'Tehran , Azadi,Seconed Bimeh, forth allay, NO4',
-            'password' => Hash::make('123456789'),
+            'password' => '$2y$10$sEVQw4EaG29wfNGB8lXxDuQse/LIQsv3GbQZZfSa9cAjJb7zPCBem',
             'email_verified_at' => now(),
-            'remmeber_token' => Str::random(10)
+            'remember_token' => Str::random(10)
 
         ]);
         $productManager->assignRole('Product Manager');
@@ -60,9 +61,9 @@ class DefaultUserSeeder extends Seeder
             'email' => 'shohreh@codeme.com',
             'phone' => '09127196483',
             'address' => 'Tehran , Azadi,Seconed Bimeh, forth allay, NO4',
-            'password' => Hash::make('123456789'),
+            'password' => '$2y$10$sEVQw4EaG29wfNGB8lXxDuQse/LIQsv3GbQZZfSa9cAjJb7zPCBem',
             'email_verified_at' => now(),
-            'remmeber_token' => Str::random(10)
+            'remember_token' => Str::random(10)
 
         ]);
         $user->assignRole('User');

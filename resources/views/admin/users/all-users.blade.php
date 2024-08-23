@@ -9,6 +9,13 @@
               @can('create-user')
               <a class="nav-link btn btn-sm btn-success" href="{{ route('users.create') }}" >+ Create  User</a>
               @endcan
+              <div style="margin-top: 10px; margin-bottom: 10px;">
+              @canany(['create-user', 'edit-user', 'delete-user'])
+              <a class="nav-link btn btn-sm btn-success" href="{{ route('sendContactEmail') }}" >Send Email Users</a>
+              @endcan
+
+              </div>
+
             </div>
         </div>
       <div class="table-responsive">

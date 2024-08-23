@@ -245,7 +245,7 @@ class UserController extends Controller
             'message' => 'password change successfully!',
             'alert-type' => 'success'
         );  
-       // return back()->with($notification);
+        //return back()->with($notification);
 
        return redirect('admin/dashboard');
       

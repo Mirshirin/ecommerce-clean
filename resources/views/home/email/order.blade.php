@@ -7,6 +7,7 @@
     <title>{{ $subject }} </title>
 </head>
 <body style="font-family: Arial, Helvetica, sans-serif; font-size: 16px">
+
 <h2>{{ $subject }}</h2>
 <h2>{{ $mailmessage }}</h2>
 <hr>
