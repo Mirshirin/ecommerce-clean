@@ -28,11 +28,11 @@ margin: 0 !important;
 </head>
 <body class="body" style="margin: 0 auto !important; padding: 0 !important;word-spacing:normal;background-color: #f2f2f2;">
 
-<h1>You have received a contact email</h1>
-<p>Please, {{ $details['message']}}</p>
-<p><strong>Your Name :</strong> {{ $details['userName'] }}</p>
-<p><strong>Your Phone Number :</strong> {{ $details['userPhone']}}</p>
-<p><strong>Your Address:</strong> {{ $details['userAddress'] }}</p>
+    <h1>You have received a contact email</h1>
+    <p>Please, {{ $details['message']}}</p>
+    <p><strong>Your Name :</strong> {{ $details['userName'] }}</p>
+    <p><strong>Your Phone Number :</strong> {{ $details['userPhone']}}</p>
+    <p><strong>Your Address:</strong> {{ $details['userAddress'] }}</p>
 
 </body>
 </html>

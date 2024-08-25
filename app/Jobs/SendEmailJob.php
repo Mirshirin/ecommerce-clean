@@ -2,8 +2,10 @@
 
 namespace App\Jobs;
 
+use App\Models\EmailLog;
 use App\Mail\ContactEmail;
 use Illuminate\Bus\Queueable;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -32,7 +34,18 @@ class SendEmailJob implements ShouldQueue
 
     public function handle()
     {
-        Mail::to($this->details['to'])->send(new ContactEmail($this->details)); 
+        try{
+            Mail::to($this->details['to'])->send(new ContactEmail($this->details)); 
+            EmailLog::create([
+                'recipient' => $this->details['to'],           
+                'message' => $this->details['message'],
+                'sent_at' => now(),
+             
+            ]);
+        } catch(\Exception $e){
+            Log::error('faield to send or log email:'. $e->getMessage());
+        }
 
+        
     }
 }

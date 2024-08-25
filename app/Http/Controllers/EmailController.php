@@ -24,8 +24,8 @@ class EmailController extends Controller
     }
     public function sendContactEmail()
     {
-        //$users = User::all();
-        $users = User::where('id', '>=', 106)->get(); // Fetch users with ID >= 106
+        $users = User::all();
+       // $users = User::where('id', '>=', 106)->get(); // Fetch users with ID >= 106
 
         $commonDetails = [  
             'message' => 'I want to check your address and your phone then send me the correct address and your mobile phone',
@@ -33,7 +33,7 @@ class EmailController extends Controller
         ]; 
     
         foreach ($users as $user) {
-            if ($user->id >= 106) {
+          //  if ($user->id >= 106) {
 
             $toEmail = $user->email;
             $jobDetails = array_merge($commonDetails, [
@@ -43,7 +43,7 @@ class EmailController extends Controller
             ]); 
     
             SendEmailJob::dispatch($jobDetails, $toEmail);
-        }
+       // }
         }
     
         return view('home.email.sent', [

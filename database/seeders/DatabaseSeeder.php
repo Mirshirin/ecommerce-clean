@@ -19,19 +19,22 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\Product::factory(10)->create();
-     //   User::factory()->count(5)->create();
+        //\App\Models\Product::factory(10)->create();
+      User::factory()->count(900)->create();
     //    Product::factory()->count(125)->create();
     //     // \App\Models\User::factory()->create([
     //     //     'name' => 'Test User',
     //     //     'email' => 'test@example.com',
     //     // ]);
-    //     $this->call([
-    //         // PermissionSeeder::class,
-    //         // RoleSeeder::class,
-    //         // DefaultUserSeeder::class,
-    //         ProductSeeder::class,
+    // DB::table('users')->insert([
+
     //     ]);
+
+    //      $this->call([
+    //              DatabaseSeeder::class,
+
+    //           DefaultUserSeeder::class,
+    //  ]);
        
     }
 }
