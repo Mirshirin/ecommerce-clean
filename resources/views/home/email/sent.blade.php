@@ -8,8 +8,8 @@
 <body>
     <div id="confirmation-message" style="display:none;">
         {{ $message }}
-        @foreach($users as $user)
-            <p>{{ $user->name }}</p>
+        @foreach( $users as $user)
+            <p>{{  $user['name'] }}</p>
         @endforeach
     </div>
 

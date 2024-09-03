@@ -12,31 +12,9 @@
               <span class="count bg-success"></span>
             </div>
             <div class="profile-name">
-              <h5 class="mb-0 font-weight-normal">{{ Auth::user()->name }}</h5>
-              <!-- @if(Auth::user()->user_status)  -->
-              <span>Gold Member</span>
-              <!-- @endif -->
+              <h5 class="mb-0 font-weight-normal">{{ Auth::user()->name }}</h5>          
             </div>
-          </div>
-          <a href="#" id="profile-dropdown" data-bs-toggle="dropdown">
-            <i class="mdi mdi-dots-vertical"></i>
-          </a>
-          <div class="dropdown-menu dropdown-menu-right sidebar-dropdown preview-list" aria-labelledby="profile-dropdown">
-            
-            <div class="dropdown-divider"></div>
-            <a href="{{ route('change-password') }}" class="dropdown-item preview-item">
-
-              <div class="preview-thumbnail">
-                <div class="preview-icon bg-dark rounded-circle">
-                  <i class="mdi mdi-onepassword  text-info"></i>
-                </div>
-              </div>
-              <div class="preview-item-content">
-                <p class="preview-subject ellipsis mb-1 text-small">Change Password</p>
-              </div>
-            </a>
-            
-        </div>
+          </div>  
       </li>
     
       <li class="nav-item menu-items">

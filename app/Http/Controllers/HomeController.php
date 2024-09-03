@@ -24,4 +24,6 @@ class HomeController extends Controller
         $products = $this->productRepository->getAllProducts();         
         return view('home.index',compact('products'));
     }
+   
+
 }  

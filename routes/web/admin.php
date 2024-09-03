@@ -20,7 +20,6 @@ Route::get('/login', function () {
 Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin-dashboard');
 
 
-
 Route::resource('users',UserController::class);
 Route::resource('permissions',PermissionController::class);
 Route::resource('roles',RoleController::class);
@@ -28,10 +27,6 @@ Route::resource('products',ProductController::class);
 Route::resource( 'orders',OrderController::class);
 Route::resource('categories',CategoryController::class);
 
-
-//user mangement
-Route::get('/change-password', [UserController::class, 'changePassword'])->name('change-password');
-Route::patch('/update-password', [UserController::class, 'updatePassword'])->name('update-password');
 
 // //permission and role user 
 Route::get('/users/{id}/permissions',[UserPermissionController::class,'createUserPermission'])->name('users.permissions')->middleware('can:staff-user-permission');

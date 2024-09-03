@@ -16,9 +16,11 @@ Route::view('dashboard', 'dashboard')->middleware(['auth', 'verified'])->name('d
 Route::get('/', [HomeController::class , 'index']);
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+Route::put('/profile', [ProfileController::class, 'updateinformation'])->name('profile.updateinformation');
 
 Route::get('/email/verify', function () {
     return view('auth.verify-email');
@@ -35,6 +37,7 @@ Route::post('/email/verification-notification', function (Request $request) {
  
     return back()->with('message', 'Verification link sent!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
 Route::get('/send-mail', [EmailController::class , 'sendContactEmail'])->name('sendContactEmail');
 
 Route::get('/product-detail/{id}', [HomeController::class , 'productDetail'])->name('product-detail');

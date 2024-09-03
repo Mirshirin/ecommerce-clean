@@ -29,10 +29,10 @@ class UserRepository implements UserRepositoryInterface
             'email' => $data['email'],
             'phone' => $data['phone'] ?? null,
             'address' => $data['address'] ?? null,
-            'password' => $data['password']  ,
-            //'password' => Hash::make($data['password'])  ,//bcrypt($data['password']),
+            //'password' => $data['password']  ,
+            'password' => Hash::make($data['password'])  ,//bcrypt($data['password']),
         ]);
-      // dd(Hash::make($data['password']) );
+       //dd(Hash::make($data['password']) );
     }
 
   
@@ -44,21 +44,62 @@ class UserRepository implements UserRepositoryInterface
 
     public function update(array $data,$id)
     {
-      // dd($data);
-        $user= User::find($id); 
-        $user->update([
+      
+
+        $user = User::find($id);
+
+       
+        $preparedData = [
             'name' => $data['name'],
             'email' => $data['email'],
             'phone' => $data['phone'],
             'address' => $data['address'],
-          
-        ]);
-        if (!empty($data['password'])){
-            $user->update([
-                'pssword' => Hash::make($data['password']),
-            ]);
-        }
+            'password' => Hash::make($data['password']),
 
+        ];
+    
+        // // Log the prepared data
+        // Log::info([
+        //     'userId' => $id,
+        //     'dataToSave' => $preparedData,
+        //     'action' => 'update'
+        // ]);
+    
+        // // Update the user
+        $validatedData = $user->update($preparedData);
+
+        // Check if a password was provided
+        if (isset($data['password']) && !empty($data['password'])) {
+            // Hash the password
+            $hashedPassword = Hash::make($data['password']);
+            
+            // Update the user with the hashed password
+           // $user->password = $hashedPassword;
+            
+            // Log the hashed password
+            // Log::info([
+            //     'userId' => $id,
+            //     'passwordHashed' => $hashedPassword,
+            //     'action' => 'update'
+            // ]);
+        }
+    
+        // // Optionally, log the result of the save operation
+        // if ($validatedData) {
+        //     Log::info([
+        //         'userId' => $id,
+        //         'updated' => true,
+        //         'dataSaved' => $preparedData,
+        //         'action' => 'update'
+        //     ]);
+        // } else {
+        //     Log::error([
+        //         'userId' => $id,
+        //         'updateFailed' => true,
+        //         'dataAttempted' => $preparedData,
+        //         'action' => 'update'
+        //     ]);
+        // }
         return $user;
     }
     public function destroy($id)

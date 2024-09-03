@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('QUEUE_CONNECTION', 'database'),
+    'default' => env('QUEUE_CONNECTION', 'sync'),
 
     /*
     |--------------------------------------------------------------------------
@@ -71,6 +71,27 @@ return [
             'after_commit' => false,
         ],
 
+        'rabbitmq' => [
+            'driver' => 'rabbitmq',
+            'queue' => env('RABBITMQ_QUEUE', 'default'),   
+    
+            'host' => env('RABBITMQ_HOST', '127.0.0.1'),
+            'port' => env('RABBITMQ_PORT', 5672),
+            'vhost' => env('RABBITMQ_VHOST', '/'),
+            'login' => env('RABBITMQ_USER', 'guest'),
+            'password' => env('RABBITMQ_PASSWORD', 'guest'),
+            'queue' => env('RABBITMQ_QUEUE', 'default'),
+            'exchange' => env('RABBITMQ_EXCHANGE', 'default'),
+            'route' => env('RABBITMQ_ROUTE', 'default'),
+          
+            'options' => [
+                'exchange' => [
+                    'name' => env('RABBITMQ_EXCHANGE_NAME', 'default'),
+                ],
+                
+            ],
+    
+        ],
     ],
 
     /*

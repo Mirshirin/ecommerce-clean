@@ -8,7 +8,9 @@ use App\Models\Product;
 use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Database\Seeders\CategorySeeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Database\Seeders\CategorySeeder as SeedersCategorySeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -19,22 +21,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        //\App\Models\Product::factory(10)->create();
-      User::factory()->count(900)->create();
-    //    Product::factory()->count(125)->create();
-    //     // \App\Models\User::factory()->create([
-    //     //     'name' => 'Test User',
-    //     //     'email' => 'test@example.com',
-    //     // ]);
-    // DB::table('users')->insert([
-
-    //     ]);
-
-    //      $this->call([
-    //              DatabaseSeeder::class,
-
-    //           DefaultUserSeeder::class,
-    //  ]);
-       
+     
+      $this->call([
+        CategorySeeder::class,
+        RoleSeeder::class,
+      ]);  
+      User::factory()->count(900)->create(); 
+      Product::factory()->count(125)->create();    
     }
 }

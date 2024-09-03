@@ -29,7 +29,7 @@ class UpdateUserRequest extends FormRequest
             'email' => ['required','email','max:250',Rule::unique('users')->ignore($userId)],
             'phone' => 'required',
             'address' => 'required',
-            'password' => 'nullable|string|min:8|confirmed',
+            'password' => ['required',  'confirmed'],
             'roles' => 'required'
         ];
 

@@ -2,19 +2,22 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Rules\Password;
+
 use App\Models\User;
 use App\Models\Permission;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use App\Services\PasswordService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Contracts\RoleRepositoryInterface;
 use App\Contracts\UserRepositoryInterface;
+use App\Http\Requests\PasswordChangeRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 
@@ -24,11 +27,16 @@ class UserController extends Controller
 {
     protected $userRepository;
     protected $roleRepository;
-
-    public function __construct(UserRepositoryInterface $userRepository,RoleRepositoryInterface $roleRepository)
+    protected $passwordService;
+    public function __construct(
+        UserRepositoryInterface $userRepository,
+        RoleRepositoryInterface $roleRepository,
+        PasswordService $passwordService
+        )
     {
         $this->userRepository = $userRepository;
         $this->roleRepository = $roleRepository;
+        $this->passwordService = $passwordService;
 
        $this->middleware('permission:create-user|edit-user|delete-user', ['only' => ['index','show']]);
        $this->middleware('permission:create-user', ['only' => ['create','store']]);
@@ -153,37 +161,29 @@ class UserController extends Controller
         $user = User::findOrFail($user->id);   
            
         Log::info('Entering update method'); // Log entering the method
-        //$validatedData = $request->all(); 
-        $validatedData = $request->validated();  
+        $validatedData = $request->all(); 
+       // $validatedData = $request->validated();  
+       // Log::info('validated', $validatedData); // Log entering the method
 
         if ($request->has('verify') && !$user->hasVerifiedEmail())
         {
             Log::info('Marking email as verified', ['user_id' => $user->id]); // Log email verification
             $user->markEmailAsVerified();
         }
-        // try {
-        //     if($request->has('email')){
-        //         $user->email=$validatedData['email'];         
-        //        }
-        // }catch (\Exception $e) {
-        //     //dd($request->email);
-        //     Log::error("Error update email: ", ['error' => $e->getMessage()]);
-        //     return response()->json(['error' => 'error email'],500);
 
+
+        // if (!empty($request->has('password'))) {
+        //     // Hash the password
+        //     $validatedData['password'] = $validatedData['password'];
         // }
-
-        if (!empty($request->has('password'))) {
-            // Hash the password
-            $validatedData['password'] = $validatedData['password'];
-        }
-        //try{
-         // dd($request->all());
+        //Log::info('validated', $validatedData); // Log entering the method
         $user = app(UserRepositoryInterface::class)->update($validatedData,$user->id); 
+        Log::info('update'); 
         if ($request->has('roles')) {
             $user->roles()->detach();
         if (method_exists($user, 'assignRole')) {
             foreach ($request->roles as $roleName) {
-                Log::info('Entering '); 
+                Log::info('Entering $request->roles '); 
 
                 DB::table('model_has_roles')->insert([
                     
@@ -194,6 +194,9 @@ class UserController extends Controller
             }            
            }               
         }
+        Log::info('roles'); 
+        session()->flash('success','h با موفقیت تغییر کرد');
+
         return redirect()->route('users.index')->with('message','user was updated.');
     //   } catch (\Exception $e){
     //     Log::info('catching '); 
@@ -221,40 +224,29 @@ class UserController extends Controller
       }
     }
    
-    public function updatePassword(Request $request)
+    public function updatePassword(PasswordChangeRequest $request)
     {
       
-        $data=$request->validate([
-            'old_password' => 'required',
-            'new_password' => 'required|confirmed',
+        $data=$request->validated();        
+        $user = Auth::user();
 
-        ]);       
-         /// Match the old passwword
-         if (!Hash::check($request->old_password,auth()->user()->password)){
-            $notification= array(
-                'message' => 'old password does not match!',
+        if (!$this->passwordService->changePassword($user, $data['old_password'], $data['new_password'])) {
+            return back()->with([
+                'message' => 'Old password does not match!',
                 'alert-type' => 'error'
-            );
-            return back()->with($notification);
-         } 
-         //update new password  
-         User::whereId(auth()->user()->id)->update([
-            'password' => Hash::make($request->new_password),
-         ]) ; 
-         $notification= array(
-            'message' => 'password change successfully!',
-            'alert-type' => 'success'
-        );  
-        //return back()->with($notification);
+            ]);
+        }
 
-       return redirect('admin/dashboard');
+        return redirect('admin/dashboard')->with([
+            'message' => 'Password changed successfully!',
+            'alert-type' => 'success'
+        ]);
       
     }
 
     public function changePassword()
-        {
-            $id=auth()->user()->id;
-            $user=User::find($id);
+    {
+        $user=Auth::user();            
         return view('admin.users.change-password',compact('user'));
     }
 }
