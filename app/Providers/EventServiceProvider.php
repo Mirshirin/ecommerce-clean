@@ -19,9 +19,9 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-        \App\Events\EmailSent::class => [
-            SaveEmailLog::class,
-        ],
+        // \App\Events\EmailSent::class => [
+        //     SaveEmailLog::class,
+        // ],
     ];
 
     /**

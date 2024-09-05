@@ -22,7 +22,7 @@ class ProfileUpdateRequest extends FormRequest
            // 'name' => ['required','string', 'max:255',Rule::unique(Permission::class)->ignore($this->user()->id)],
            'name' => [ 'string', 'max:255'],
             'email' => [ 'email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
-            'password' => ['required',  'confirmed'],
+            'password' => [  'confirmed'],
 
         ];
     }

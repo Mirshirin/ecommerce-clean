@@ -24,7 +24,9 @@
                </li>
                @can(['view-product'])
                 <li class="nav-item">
-                   <a class="nav-link" href="{{ route('admin-dashboard') }}">Products</a>
+                <a class="nav-link" href="{{ route('products.index') }}#allproduct">
+                Products
+                  </a> 
                 </li>              
                 @endcan
                <div class="dropdown">

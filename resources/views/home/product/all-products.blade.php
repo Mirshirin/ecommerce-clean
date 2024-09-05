@@ -1,14 +1,14 @@
 @extends('home.master')
 
 @section('content')
-<section class="product_section layout_padding">
-    <div class="container">
+<section class="product_section layout_padding" >
+    <div class="container" >
        <div class="heading_container heading_center">
           <h2>
              Our <span>products</span>
           </h2>
        </div>
-       <div class="row">          
+       <div class="row" >          
         @foreach ($products as $product)
         <div class="col-sm-6 col-md-4 col-lg-4">
          <div class="box">
@@ -26,9 +26,7 @@
                         </div >
                         <div class="col-md-4">
                            <!-- <input type="submit" value="Add to Cart" name="" id="" class="option1"> -->
-                           <h3 class="mb-3">Add to Cart"</h3>
-
-                         
+                           <h3 class="mb-3">Add to Cart"</h3>                         
                         </div>
                      </div>
                   </form>

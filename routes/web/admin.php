@@ -14,9 +14,7 @@ use App\Http\Controllers\Admin\UserPermissionController;
 
 
 
-Route::get('/login', function () {
-    return redirect('/admin/dashboard');
-});
+
 Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin-dashboard');
 
 

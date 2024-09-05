@@ -17,7 +17,7 @@
  
  </style>
 <section class="product_section layout_padding" id="specific-section">
-   <div class="container">
+   <div class="container" id="allproduct">
       <div class="heading_container heading_center">
          <h2>
             Our <span>products</span>

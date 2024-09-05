@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 
 class CartController extends Controller
 {
-       
     public function showCarts(Request $request ){
         if(Auth::id()){
          
@@ -44,7 +45,8 @@ class CartController extends Controller
         }
        
           session()->put('cart', $cart);
-        
+
+
         return redirect()->back()->with('success', '');
 
     }else  {

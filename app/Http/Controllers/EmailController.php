@@ -29,29 +29,6 @@ class EmailController extends Controller
         ->get()
          ->toArray();
 
-    //     User::select('id','name', 'email', 'phone', 'address')    
-    //     ->chunk(100, function ($users) {
-    //         $commonDetails = [
-    //             'message' => 'I want to check your address and your phone then send me the correct address and your mobile phone',
-    //             'subject' => 'check email',
-    //         ];
-
-    //     foreach ($users as $user) {
-    //         $toEmail = $user->email;
-    //         $jobDetails = array_merge($commonDetails, [
-    //             'userName' => $user->name,
-    //             'userPhone' => $user->phone,
-    //             'userAddress' => $user->address,
-                
-    //         ]);           
-    //         SendEmailJob::dispatch($jobDetails, $toEmail);
-    //     }
-    // });
-    //     return view('home.email.sent', [
-    //         'message' => 'Emails sent successfully.',
-    //         'users' =>  $users,
-    //     ]);
-
     $commonDetails = [
         'message' => 'I want to check your address and your phone then send me the correct address and your mobile phone',
         'subject' => 'check email',

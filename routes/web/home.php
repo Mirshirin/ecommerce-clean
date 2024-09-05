@@ -10,31 +10,30 @@ use App\Http\Controllers\EmailController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use App\Http\Controllers\Auth\EmailVerificationPromptController;
 
 
 Route::view('dashboard', 'dashboard')->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/', [HomeController::class , 'index']);
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-
+    Route::put('/profile', [ProfileController::class, 'updateinformation'])->name('profile.updateinformation');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-Route::put('/profile', [ProfileController::class, 'updateinformation'])->name('profile.updateinformation');
 
 Route::get('/email/verify', function () {
     return view('auth.verify-email');
 })->middleware('auth')->name('verification.notice');
- 
+
+
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill();
- 
+    $request->fulfill(); 
     return redirect('/home');
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
 Route::post('/email/verification-notification', function (Request $request) {
-    $request->user()->sendEmailVerificationNotification();
- 
+    $request->user()->sendEmailVerificationNotification(); 
     return back()->with('message', 'Verification link sent!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
@@ -46,6 +45,7 @@ Route::get('/',[HomeController::class,'homeProducts'])->name('products-index');
 Route::get('/show-carts',[CartController::class,'showCarts'])->name('show-carts');
 Route::post('/add-cart/{id}', [CartController::class , 'addToCart'])->name('add-cart');
 Route::delete('/delete-carts/{id}',[CartController::class,'deleteCarts'])->name('delete-carts');
+
 
 // Route::post('/payment',[PaymentController::class,'payment'])->name('payment')->middleware('auth');
 Route::get('/checkout',[PaymentController::class,'checkout'])->name('checkout')->middleware('auth');

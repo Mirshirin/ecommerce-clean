@@ -19,8 +19,8 @@ class ProfileUpdateInformationRequest extends FormRequest
     {
         return [
            // 'label' => ['string', 'max:255',Rule::unique(Permission::class)->ignore($this->user()->id)],
-           // 'name' => ['required','string', 'max:255',Rule::unique(Permission::class)->ignore($this->user()->id)],
-           'name' => [ 'string', 'max:255'],
+            'name' => ['required','string', 'max:255',Rule::unique(Permission::class)->ignore($this->user()->id)],
+          // 'name' => [ 'string', 'max:255'],
             'email' => [ 'email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
 
         ];

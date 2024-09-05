@@ -27,6 +27,9 @@ class ProfileController extends Controller
             'users'=> $users,
         ]);
     }
+    /**
+     * @update name and email 
+     */
     public function updateinformation(ProfileUpdateInformationRequest $request)
     {
     Log::info('Validated Data:', $request->validated());
@@ -40,7 +43,7 @@ class ProfileController extends Controller
         $user->save(); // ذخیره تغییرات در دیتابیس
 
         // ثبت اطلاعات در لاگ برای بررسی
-        Log::info('Update request:', $validatedData);
+        Log::info('Update request:1111111111111', $validatedData);
         //session()->flash('success', ' با موفقیت تغییر کرد');
 
         // هدایت به صفحه محصولات با پیغام موفقیت
@@ -54,7 +57,7 @@ class ProfileController extends Controller
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         
-        Log::info('Update request:', $request->all());
+        Log::info('Update request:222222222222222', $request->all());
 
         // $request->user()->fill($request->validated());
 

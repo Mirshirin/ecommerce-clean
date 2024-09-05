@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\Product;
-use App\Models\PaymentOrder;
 use App\Mail\OrderEmail;
-use Illuminate\Support\Facades\Mail;
+use App\Models\PaymentOrder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use App\Contracts\OrderRepositoryInterface;
 use App\Contracts\PaymentRepositoryInterface;
@@ -34,10 +35,19 @@ class PaymentController extends Controller
         $this->paymentRepository = $paymentRepository;  
 
     }
+    
     public function checkout(Request $request)
     {
-        $cart=$request->session()->has('cart') ? $request->session()->get('cart') : null;   
+        //dd(method_exists(auth()->user(), 'hasVerifiedEmail')); // Should return true
+
         $user = Auth::user();
+        if ($user && !$user->hasVerifiedEmail()) {
+            // اگر ایمیل تأیید نشده باشد، به صفحه تأیید ایمیل هدایت کنید
+            return Redirect::route('verification.notice');
+        }
+        
+        $cart=$request->session()->has('cart') ? $request->session()->get('cart') : null;   
+        
         if (empty($cart)) {
          
             return response()->json([
@@ -58,9 +68,9 @@ class PaymentController extends Controller
     }
     public function processCheckout(Request $request)
     {
-   
+       
         $cart=$request->session()->has('cart') ? $request->session()->get('cart') : null;        
-        
+       
         // Step -1 Apply validation
         $validator = Validator::make($request->all(),[
             'name' => 'required|min:3',
@@ -77,8 +87,8 @@ class PaymentController extends Controller
                 'errors' => $validator->errors(),
             ]);
         }
-
-        $user = Auth::user();
+     
+        $userId = Auth::user()->id;
             // Step-3 Store data in orders table
             if($request->payment_method == 'cod')
             {
@@ -98,7 +108,8 @@ class PaymentController extends Controller
                         'quantity'=>$product['quantity'],                    
                         'product_id'=> $product['product_id'],
                         'payment_status'=> 'not paid',  
-                        'delivery_status'=>'pending',    
+                        'delivery_status'=>'pending', 
+                        'user_id' =>  $userId    
                     ];
                     $order = $this->orderRepository->createOrder($orderData);
                     $discountprice = $product['code']!=0
@@ -117,10 +128,9 @@ class PaymentController extends Controller
                     }
 
                 }
-           
         
                 $paymentData =[
-                    'user_id' => auth()->id(),
+                    'user_id' =>  $userId,
                     'order_id' => $order->id,
                     'amount_paid' => $totalAmount,
                     'payment_date' => now(),
@@ -129,11 +139,11 @@ class PaymentController extends Controller
       
                //orderEmail($order->id,'customer'); 
        
-       $emailController= new EmailController();
-       $emailController->sendEmails($order);
-        session()->flash('success','');
-               Session()->forget('code');
-               Session::put('cart', []);
+                $emailController= new EmailController();
+                $emailController->sendEmails($order);
+                session()->flash('success','');
+                Session()->forget('code');
+                Session::put('cart', []);
 
 
                 return response()->json([

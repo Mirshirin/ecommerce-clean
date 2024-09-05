@@ -17,19 +17,18 @@ class AdminController extends Controller
 {
     use SharedFunctionalityTrait;
 
-    public function dashboard() {
-        $metrics = app(UserMetricsController::class)->getMetrics(); 
-        $user = auth()->user();
-        return view('admin.index', compact('user', 'metrics')); 
+    public function dashboard(Request $request) {
+
+       if(auth()->check() && 
+       (auth()->user()->getRoleNames()->contains('Admin') || 
+       auth()->user()->getRoleNames()->contains('Super Admin') ||
+       auth()->user()->getRoleNames()->contains('Product Manager'))){
+       
+            $metrics = app(UserMetricsController::class)->getMetrics(); 
+            $user = auth()->user();
+            return view('admin.index', compact('user', 'metrics')); 
+        }
+         return redirect()->back();
     }
     
-    
-   
-    
-    
-    
-
-
-
-
 }

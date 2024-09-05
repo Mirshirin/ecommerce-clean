@@ -58,7 +58,7 @@
       </li>
       @endcan
    
-      @can(['create-product', 'edit-product', 'delete-product','view-product' ])
+      @canany(['create-product', 'edit-product', 'delete-product', 'view-product'])
      
       <li class="nav-item menu-items">
         <a class="nav-link" href="{{ route('products.index') }}">

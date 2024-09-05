@@ -19,7 +19,7 @@ class UserFactory extends Factory
             'email' => $this->faker->unique()->safeEmail(),
             'phone' => $this->faker->phoneNumber(),
             'address' => $this->faker->address(),
-            'password' => '$2y$10$sEVQw4EaG29wfNGB8lXxDuQse/LIQsv3GbQZZfSa9cAjJb7zPCBem', // store bcrypt hash of password
+            'password' =>  bcrypt('password'), // store bcrypt hash of password
             'email_verified_at' => now(),
             'remember_token' => Str::random(60),
         ];

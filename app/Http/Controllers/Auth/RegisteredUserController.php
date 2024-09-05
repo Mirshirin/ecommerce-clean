@@ -34,6 +34,9 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'phone' => ['nullable', 'string', 'max:20'], // مثال برای اعتبارسنجی شماره تلفن
+            'address' => ['nullable', 'string', 'max:255'], // مثال برای اعتبارسنجی آدرس
+ 
         ]);
 
         $user = User::create([
@@ -41,9 +44,8 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'phone' => $request->phone,
             'address' => $request->address,
-            'password' => $request->password,
+            'password' => Hash::make($request->password), // هش کردن رمز عبور
         ]);
-        $user->sendEmailVerificationNotification();
         event(new Registered($user));
 
         Auth::login($user);
