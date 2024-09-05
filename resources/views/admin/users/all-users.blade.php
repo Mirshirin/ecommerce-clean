@@ -25,19 +25,27 @@
               <th> # </th>
               <th>Name </th>
               <th>Email </th>
+              <th>Roles </th>
               <th>Phone </th>
               <th>Address </th>
               <th>Email status</th>  
               <th> Action </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody>     
+
           @foreach ( $users as $user)
             <tr class="item_type user">
                 <input type="hidden" class="delete_val_id" value="{{ $user->id }}">
                 <td> {{  $user->id }} </td>
                 <td> {{ $user->name }}</td>
                 <td> {{ $user->email }}</td>
+                <td>
+                @php
+                    $roles = $user->getRoleNames()->implode(', ');
+                @endphp
+                {{ $roles }}   
+                </td>
                 <td> {{ $user->phone }}</td>
                 <td> {{ $user->address }}</td>
                 <td>

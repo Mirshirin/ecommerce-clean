@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
         CategorySeeder::class,
         RoleSeeder::class,
       ]);  
-      User::factory()->count(900)->create(); 
+      User::factory()->withRole('User')->count(900)->create(); 
       Product::factory()->count(125)->create();    
     }
 }
