@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description');
-            $table->string('image')->default('public\productImage\1713719850.jpg');
+            $table->string('image')->default('public\storage\1713719850.jpg');
             $table->integer('quantity');
             $table->float('price');
             $table->float('discount_price')->nullable();

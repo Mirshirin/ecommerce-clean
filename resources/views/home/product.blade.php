@@ -49,7 +49,7 @@
             @if (strpos($product->image,'http') !== false)
                <img src="{{ $product->image }}" alt="{{ $product->title }}">
             @else    
-              <img src="/productImage/{{ $product->image }}" alt="{{ $product->title }}">
+              <img src="/storage/{{ $product->image }}" alt="{{ $product->title }}">
             @endif
      
            </div>

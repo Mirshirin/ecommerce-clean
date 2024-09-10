@@ -4,9 +4,10 @@ namespace App\Repositories;
 
 use App\Models\Product;
 use App\Models\Category;
+
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Request;
+
+use Illuminate\Support\Facades\Storage;
 use App\Contracts\ProductRepositoryInterface;
 
 class ProductRepository implements ProductRepositoryInterface
@@ -26,43 +27,46 @@ class ProductRepository implements ProductRepositoryInterface
         return Category::all();
     }
 
-
     public function store(array $data, $imageFile = null)
     {
-        $product = new Product($data);      
-        if ($imageFile!== null) {        
-            $imageName = time().'.'.$imageFile->getClientOriginalExtension();            
-            $path='productImage/';
-            $imageFile->move($path, $imageName);
-            $product->image = $imageName;
-        }        
-        $product->save();
-        return $product;
+        try {
+            $product = new Product($data);
+   
+            // بررسی و ذخیره تصویر در صورت وجود
+            if ($imageFile && $imageFile instanceof \Illuminate\Http\UploadedFile) {
+        
+                $imageName = uniqid() . '.' . $imageFile->getClientOriginalExtension();
+                $path = $imageFile->storeAs('photos', $imageName, 'public');        
+                $product->image = $path;
+           
+            }
+    
+            // ذخیره محصول در دیتابیس
+            $product->save();
+            
+    
+            return $product;
+        } catch (\Exception $e) {
+            throw new \Exception('Failed to store product: ' . $e->getMessage());
+        }
     }
 
     public function update($id, array $data, $imageFile =null)
-    {
-        
-        $product = Product::find($id);
-
+    {       
+        $product = Product::findOrFail($id);
         if (!$product) {
             throw new \Exception('Product not found.'); 
         }
         
         if ($imageFile!== null) {
             if ($product->image) {
-
             $oldImage = $product->image;
-
-            if ($oldImage && File::exists(public_path('productImage/'. $oldImage))) {
-                File::delete(public_path('productImage/'. $oldImage));
-
+            if (Storage::disk('public')->exists($oldImage)) {
+                Storage::disk('public')->delete($oldImage);
             }
-
-            $imageName = time(). '.'. $imageFile->getClientOriginalExtension();
-
-            $imageFile->move('productImage/', $imageName);
-            $data['image'] = $imageName;
+            $imageName = uniqid() . '.' . $imageFile->getClientOriginalExtension();
+            $imagePath = $imageFile->storeAs('photos', $imageName, 'public');
+            $data['image'] = $imagePath; // ذخیره مسیر جدید در دیتابیس
             }
         }
 
@@ -74,21 +78,16 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function destroy($id)
     {
-     
         $product = Product::find($id);
-    
-        if ($product && File::exists(public_path('productImage/'. $product->image))) {
-            File::delete(public_path('productImage/'. $product->image));
+        if (!$product) {
+            return back()->withErrors(['error' => 'Product not found.']);
         }
-        // if ($product) {
-        //     $product->delete();
-        //     return response()->json(['status' => 'Data deleted successfully.']);
-        // } else {
-            
-        //     return response()->json(['error' => 'Product not found'], 404);
-        // }
-        return $product;    
-
-
+    
+        if ($product->image && Storage::disk('public')->exists($product->image)) {
+            Storage::disk('public')->delete($product->image);
+        }
+    
+        $product->delete();    
+        return redirect()->route('products.index');
     }
 }

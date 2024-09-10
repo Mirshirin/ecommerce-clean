@@ -47,7 +47,6 @@ Route::post('/add-cart/{id}', [CartController::class , 'addToCart'])->name('add-
 Route::delete('/delete-carts/{id}',[CartController::class,'deleteCarts'])->name('delete-carts');
 
 
-// Route::post('/payment',[PaymentController::class,'payment'])->name('payment')->middleware('auth');
 Route::get('/checkout',[PaymentController::class,'checkout'])->name('checkout')->middleware('auth');
 Route::get('/thanks/{orderId}',[PaymentController::class,'thankyou'])->name('thankyou');
 Route::post('/processCheckout',[PaymentController::class,'processCheckout'])->name('processCheckout');

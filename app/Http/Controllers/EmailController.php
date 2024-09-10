@@ -13,20 +13,11 @@ use Illuminate\Support\Facades\Mail;
 
 class EmailController extends Controller
 {
-    public function sendEmails($order)
-    {
-     
-        $toEmail = $order->email;
-        $mailmessage = 'your shopping';
-        $subject = 'thanks for shopping';
-        $orderDetails=$order;
-        Mail::to($toEmail)->send(new OrderEmail($mailmessage,$subject,$orderDetails));
-     
-    }
+
     public function sendContactEmail()
     {
          $users = User::select('id','name', 'email', 'phone', 'address') 
-        ->get()
+         ->get()
          ->toArray();
 
     $commonDetails = [
@@ -35,6 +26,7 @@ class EmailController extends Controller
     ];
 
     User::select('id','name', 'email', 'phone', 'address')
+        -> where('id','<=',4)
         ->chunk(100, function ($users) use ($commonDetails) {
             foreach ($users as $user) {
                 try {

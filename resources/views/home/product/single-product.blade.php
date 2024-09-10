@@ -15,11 +15,11 @@
 
 <section class="arrival_section">
    <div class="container"  style="float: right; margin-right: 1px;">
-      <!-- <img src="/productImage/{{ $product->image }}"   alt="{{ $product->title }}"> -->
+ 
       @if (strpos($product->image,'http') !== false)
          <img src="{{ $product->image }}" alt="{{ $product->title }}">
       @else    
-         <img src="/productImage/{{ $product->image }}" alt="{{ $product->title }}">
+         <img src="/storage/{{ $product->image }}" alt="{{ $product->title }}">
       @endif
      
    </div>

@@ -21,7 +21,7 @@
     @if (strpos($order->image,'http') !== false)
         <img src="{{ $order->image }}" alt="{{  $order->product_title }}"> 
     @else    
-        <img src="{{ 'productImage/'. $order->image }}" alt="{{ $order->product_title  }}"> 
+        <img src="{{ 'storage/'. $order->image }}" alt="{{ $order->product_title  }}"> 
     @endif  
     </div>
   

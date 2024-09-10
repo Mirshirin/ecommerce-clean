@@ -39,7 +39,7 @@
                   </select>
             <label class="sr-only-visible" for="inlineFormInputName2">Image</label>
             <input type="file" class="form-control"   name="image"   style= "background-color:white !important; color: black;" >
-                  <img src="/productImage/{{ $product->image }}" alt="{{ $product->title }}" height="60px" class="mb-2 mt-2">
+                  <img src="/storage/{{ $product->image }}" alt="{{ $product->title }}" height="60px" class="mb-2 mt-2">
             <br>
             <button type="submit" class="btn btn-primary mb-2">Submit</button>
         </form>

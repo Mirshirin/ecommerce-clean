@@ -36,7 +36,7 @@
                     @if (strpos($order->image,'http') !== false)
                       <td>  <img src="{{ $order->image }}" alt="{{  $order->product_title }}"> </td>
                     @else    
-                      <td>  <img src="{{ asset('productImage/'. $order->image) }}" alt="{{ $order->product_title  }}"> </td>
+                      <td>  <img src="{{ asset('storage/'. $order->image) }}" alt="{{ $order->product_title  }}"> </td>
                     @endif   
                     <td> {{  $order->name }} </td> 
                     <td> {{  $order->email }} </td> 

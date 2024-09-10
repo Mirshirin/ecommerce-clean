@@ -41,7 +41,9 @@
             @enderror
       <label class="sr-only-visible" for="inlineFormInputName2">Image</label>
       <input type="file" class="form-control"   name="image"  placeholder="Enter product discount " style= "background-color:white !important; color: black;" >
-
+      @error('image')
+                  <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
+      @enderror
       <br>
       <button type="submit" class="btn btn-primary mb-2">Submit</button>
     </form>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateProductRequest;
 use App\Contracts\ProductRepositoryInterface;
@@ -37,11 +38,19 @@ class ProductController extends Controller
     }
     public function store(UpdateProductRequest $request){
         $validatedData = $request->validated(); 
-        $image = $request->file('image');       
-        $product = app(ProductRepositoryInterface::class)->store($validatedData, $image);        
-        $product->save();
-        return redirect()->route('products.index')
-        ->with('message', 'Data saved.');
+        $image = $request->hasFile('image') ? $request->file('image'): null;
+        try {
+           
+            // ذخیره محصول جدید از طریق Repository
+            $product = app(ProductRepositoryInterface::class)->store($validatedData, $image);
+    
+           
+            return redirect()->route('products.index')
+                ->with('message', 'Data saved successfully.');
+        } catch (\Exception $e) {
+            // مدیریت خطاها و بازگرداندن پیام خطا
+            return back()->withErrors(['error' => 'Failed to save data. ' . $e->getMessage()]);
+        }
     }
    
     public function edit($id)
@@ -54,7 +63,7 @@ class ProductController extends Controller
     public function update(UpdateProductRequest $request, $id)
     {
         $validatedData = $request->validated();       
-        $image = $request->file('image');
+        $image = $request->file('image')->store('photos', 'public');   
         try {
             $product = app(ProductRepositoryInterface::class)->update($id, $validatedData, $image);
             $categories = $this->productRepository->getAllCategories(); 
@@ -67,11 +76,19 @@ class ProductController extends Controller
     
     public function destroy($id)
     {       
-        $product= $this->productRepository->destroy($id);
-        if ($product) {
-            $product->delete();
-            return response()->json(['status' => 'Data deleted successfully.']);
-        }     
+        try {
+            $product = $this->productRepository->destroy($id);
+    
+            // اگر محصول حذف شد، بازگشت پیام موفقیت
+            if ($product) {
+                return response()->json(['status' => 'Data deleted successfully.']);
+            } else {
+                return response()->json(['status' => 'Product not found.'], 404);
+            }
+        } catch (\Exception $e) {
+            // مدیریت خطاها و بازگرداندن پیام خطا
+            return response()->json(['status' => 'Error deleting data.', 'error' => $e->getMessage()], 500);
+        }   
     }
    
    

@@ -2,40 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Order;
-use App\Models\Product;
-use App\Mail\OrderEmail;
-use App\Models\PaymentOrder;
 use Illuminate\Http\Request;
+use App\Services\CartService;
+use App\Services\EmailService;
+use App\Services\OrderService;
+use App\Services\PaymentService;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Session;
+
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
-use App\Contracts\OrderRepositoryInterface;
-use App\Contracts\PaymentRepositoryInterface;
-use App\Contracts\ProductRepositoryInterface;
 
 
 class PaymentController extends Controller
 {
-    protected $orderRepository;
-    protected $productRepository;
-    protected $paymentRepository;
+    protected $orderService;
+    protected $paymentService;
+    protected $cartService;
+    protected $emailService;
 
- 
-    public function __construct(
-        OrderRepositoryInterface $orderRepository ,
-        ProductRepositoryInterface $productRepository,
-        PaymentRepositoryInterface $paymentRepository,
-        )
+    public function __construct(OrderService $orderService, PaymentService $paymentService, CartService $cartService, EmailService $emailService)
     {
-        $this->orderRepository = $orderRepository;
-        $this->productRepository = $productRepository;  
-        $this->paymentRepository = $paymentRepository;  
-
+        $this->orderService = $orderService;
+        $this->paymentService = $paymentService;
+        $this->cartService = $cartService;
+        $this->emailService = $emailService;
     }
-    
     public function checkout(Request $request)
     {
         //dd(method_exists(auth()->user(), 'hasVerifiedEmail')); // Should return true
@@ -68,92 +59,65 @@ class PaymentController extends Controller
     }
     public function processCheckout(Request $request)
     {
-       
-        $cart=$request->session()->has('cart') ? $request->session()->get('cart') : null;        
-       
-        // Step -1 Apply validation
-        $validator = Validator::make($request->all(),[
-            'name' => 'required|min:3',
-            'email' => 'required|email',
-            'address' => 'required|min:10',           
-            'phone' => 'required',
-        ]);
-       
-        if($validator->fails())
-        {
+        $cart = $this->cartService->getCart($request);
+
+        // Step 1: Validate the input
+        $validator = $this->validateCheckout($request);
+
+        if ($validator->fails()) {
             return response()->json([
-                'message' => 'Plesae fix the errors',
+                'message' => 'Please fix the errors',
                 'status' => false,
                 'errors' => $validator->errors(),
             ]);
-        }
-     
-        $userId = Auth::user()->id;
-            // Step-3 Store data in orders table
-            if($request->payment_method == 'cod')
-            {
+        }     
+        $userId = Auth::id();
+        // Handle COD payment
+            if ($request->payment_method == 'cod') {
+                $orderResults = $this->orderService->createOrdersFromCart($cart, $userId);
+                $totalAmount = $orderResults['totalAmount'];
+                $lastOrder = $orderResults['lastOrder'];
+                $allOrders = $orderResults['orderResults']; // Full list of orders
 
-
-                $totalAmount = 0;   
-                foreach ($cart as $productId => $product) 
-                {
-                    $orderData= [
-                        'name'=>$product['name'],
-                        'email'=>$product['email'],
-                        'phone_number'=> $product['phone_number'],
-                        'address' => $product['address'],
-                        'product_title'=> $product['product_title'],       
-                        'price'=>$product['price'] ,                       
-                        'image'=> $product['image'],
-                        'quantity'=>$product['quantity'],                    
-                        'product_id'=> $product['product_id'],
-                        'payment_status'=> 'not paid',  
-                        'delivery_status'=>'pending', 
-                        'user_id' =>  $userId    
-                    ];
-                    $order = $this->orderRepository->createOrder($orderData);
-                    $discountprice = $product['code']!=0
-                                   ? $product['price']-($product['price'] * $product['code']) / 100 : $product['price'];
-                 
-                    $totalAmount += $discountprice * $product['quantity']; // محاسبه مجموع قیمت کل سفارش
-                    $totalAmount = number_format($totalAmount, 2, '.', '');
-
-                    $productData = $this->productRepository->getProductById($product['product_id']);
-                    if($productData->quantity == 'Yes')
-                    {
-                        $currentQty = $productData->quantity;
-                        $updatedQty = $currentQty-$product['quantity'];
-                        $productData->quantity = $updatedQty;
-                        $productData->save();
-                    }
-
-                }
-        
-                $paymentData =[
-                    'user_id' =>  $userId,
-                    'order_id' => $order->id,
+                $paymentData = [
+                    'user_id' => $userId,
+                    'order_id' => $lastOrder->id,
                     'amount_paid' => $totalAmount,
                     'payment_date' => now(),
                 ];
-                $payment= $this->paymentRepository->createPayment( $paymentData );
-      
-               //orderEmail($order->id,'customer'); 
-       
-                $emailController= new EmailController();
-                $emailController->sendEmails($order);
-                session()->flash('success','');
-                Session()->forget('code');
-                Session::put('cart', []);
 
+                $this->paymentService->createPayment($paymentData);
 
-                return response()->json([
-                    'message' => 'Order Saved Successfully.',
-                    'orderId' => $order->id,
-                    'status' => true,
-                ]);
+            // Step 3: Send confirmation email
+            //$this->emailService->sendOrderConfirmation($order);
+            //$orderResults 
+            $this->emailService->sendOrderConfirmation( $orderResults  );
+           
+            session()->flash('success', '');
+            session()->forget('code');
+            session()->put('cart', []);       
+
+            return response()->json([
+                'message' => 'Order Saved Successfully.',
+                'orderId' => $lastOrder->id,
+                'status' => true,
+            ]);
 
             }
+        return response()->json([
+                    'message' => 'Invalid payment method',
+                    'status' => false,
+                ]);
+    }
 
+    private function validateCheckout(Request $request)
+    {
+        return Validator::make($request->all(), [
+            'name' => 'required|min:3',
+            'email' => 'required|email',
+            'address' => 'required|min:10',
+            'phone' => 'required',
+        ]);
     }
     public function thankyou($id)
     {
@@ -162,74 +126,6 @@ class PaymentController extends Controller
         ]);
     }
 
-    // public function payment(Request $request){
-        
-    //     $cart=$request->session()->has('cart') ? $request->session()->get('cart') : null;        
-      
-    //     if (empty($cart)) {
-         
-    //         return redirect()->route('home')->with('error', 'سبد خرید شما خالی است. لطفاً محصولاتی را به سبد اضافه کنید.');
-    //     } 
-    //     $totalAmount = 0;   
-    //     foreach ($cart as $productId => $product) 
-    //     {
-    //         $order= Order::create([
-    //             'name'=>$product['name'],
-    //             'email'=>$product['email'],
-    //             'phone_number'=> $product['phone_number'],
-    //             'address' => $product['address'],
-    //             'product_title'=> $product['product_title'],       
-    //             'price'=>$product['price'] ,                       
-    //             'image'=> $product['image'],
-    //             'quantity'=>$product['quantity'],                    
-    //             'product_id'=> $product['product_id'],
-    //             'payment_status'=> 'cash on delivery',  
-    //             'delivery_status'=>'processing',    
-    //         ]);
-    //         $totalAmount += $product['price'] * $product['quantity']; // محاسبه مجموع قیمت کل سفارش
-
-    //     }
-            
-    //     $payment = PaymentOrder::create([
-    //         'user_id' => auth()->id(),
-    //         'order_id' => $order->id,
-    //         'amount_paid' => $totalAmount,
-    //         'payment_date' => now(),
-    //     ]);
-
-        
-    //     $invoice = (new Invoice)->amount($totalAmount);
-        
-    //     return Payment::callbackUrl(route("pay-result"))->purchase(
-    //         $invoice, 
-    //         function($driver, $transactionId) use($payment)  {
-    //             // We can store $transactionId in database.
-    //             $payment->update([
-    //                 'transaction_id' => $transactionId                   
-    //             ]);
-    //         }
-    //     )->pay()->render();
    
-    //     return redirect()->route('payment_result')->with('message','we have recieved your order ');
-    // }
-    // public function payResult(Request $request)
-    // {
-    //     //dd($request->all());
-    //     $payment = Payment::where('order_id', $request->order_id)->first();
-        
-    
-    //     if (!$payment) {
-    //         return redirect()->back()->withErrors(['error' => 'پرداخت انجام نشده است.']);
-    //     }
-    //     $successfulPayment=0;
-    //     if ($successfulPayment) { // فرض بر این است که $successfulPayment یک متغیر است که مشخص می‌کند آیا پرداخت موفق بوده است یا خیر
-    //         $payment->update(['status' => 'completed']);
-    //     } else {
-    //         $payment->update(['status' => 'failed']);
-    //     }
-        
-    //     return view('payment_result', compact('payment'));
-    // }
-    
 
 }

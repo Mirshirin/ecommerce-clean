@@ -4,11 +4,12 @@ namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
-use Illuminate\Mail\Mailables\Address;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Envelope;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Storage;
+
 
 class OrderEmail extends Mailable
 {
@@ -18,6 +19,7 @@ class OrderEmail extends Mailable
     public $mailmessage;
     public $subject;
     public $orderDetails;
+    //public $photos;
 
     /**
      * Create a new message instance.
@@ -29,6 +31,7 @@ class OrderEmail extends Mailable
         $this->mailmessage = $mailmessage;
         $this->subject = $subject;
         $this->orderDetails = $orderDetails;
+ 
     }
 
     /**
@@ -67,8 +70,36 @@ class OrderEmail extends Mailable
     }
     public function build()
     {
-        return $this->view('home.email.order')
-                    ->subject($this->subject)
-                    ->with(['message' => $this->mailmessage, 'order' => $this->orderDetails]);
+        $email = $this->view('home.email.order')
+                      ->subject($this->subject)
+                      ->with([
+                          'message' => $this->mailmessage,
+                          'order' => $this->orderDetails,
+                          'totalProducts' => $this->orderDetails['total'] ?? 0, // Ensure 'total' key exists
+                      ]);
+                 
+    foreach ($this->orderDetails['orderResults'] as $order) {
+        // Check if 'image' key exists and is not empty
+        if (!empty($order['image'])) {
+            $imagePath = $order['image'];
+
+            // Check if the image exists in the storage
+            if (Storage::disk('public')->exists($imagePath)) {
+                // Attach the image from storage
+                $email->attachFromStorageDisk('public', $imagePath, basename($imagePath), [
+                    'mime' => 'image/jpeg', // Adjust the MIME type if necessary
+                ]);
+            } else {
+                // Log or handle cases where the image path is incorrect or the image is missing
+                Log::warning('Image not found or inaccessible for order: ' . $order['id']);
+            }
+        } else {
+            // Log if the 'image' key is missing or empty
+            Log::info('No image found for order: ' . $order['id']);
+        }
     }
+
+    return $email;
+}
+    
 }

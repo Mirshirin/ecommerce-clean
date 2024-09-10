@@ -29,7 +29,7 @@
                                     <td>{{ $cartProduct['quantity'] }}</td>   
                                     <td>{{ $cartProduct['code'] }}</td>  
                                     <td>{{ $cartProduct['price']-(($cartProduct['price'] * $cartProduct['code']) / 100 )  }}</td>   
-                                    <td>  <img src="{{  $cartProduct['image'] }}"  style="width:50px" class="img-responsive"></td>  
+                                    <td>  <img src="{{ asset('storage/' . $cartProduct['image']) }}" style="width:50px" class="img-responsive"></td>  
                                     
                                     <form action="{{ route('delete-carts', $id) }}" method="post">
                                         @csrf                                

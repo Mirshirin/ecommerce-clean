@@ -33,7 +33,7 @@
                </div>
             </div>
             <div class="img-box">
-               <img src="/productImage/{{ $product->image }}" alt="{{ $product->title }}">
+               <img src="/storage/{{ $product->image }}" alt="{{ $product->title }}">
             </div>
             <div class="detail-box">
                <h5>

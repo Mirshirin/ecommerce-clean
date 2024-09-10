@@ -52,7 +52,7 @@
                 @if (strpos($product->image,'http') !== false)
                 <td>  <img src="{{ $product->image }}" alt="{{ $product->title }}"> </td>
                 @else    
-                <td>  <img src="{{ asset('productImage/'. $product->image) }}" alt="{{ $product->title }}"> </td>
+                <td>  <img src="{{ asset('storage/'. $product->image) }}" alt="{{ $product->title }}"style="max-height: 100px; max-width: 100px;"> </td>
                 @endif           
                 <td> {{ $product->title }}</td>
                 <td> {{ $product->description }}</td>

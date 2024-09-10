@@ -22,11 +22,11 @@
           <label class="sr-only-visible" for="address">address</label>
           <input type="text" class="form-control mb-2 mr-sm-2"  id="address" name="address"  placeholder="Enter address" style= "background-color:white !important; color: black;" >
           <label class="sr-only-visible" for="password">Password</label>
-          <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password">
+          <input type="password" class="form-control mb-2 mr-sm-2 @error('password') is-invalid @enderror" id="password"   placeholder="Enter passsword"  name="password" style= "background-color:white !important; color: black;">
             @error('password')
                 <span class="text-danger">{{ $message }}</span>
             @enderror          
-        <label class="sr-only-visible" for="password_confirmation">Password Confirmation</label>
+          <label class="sr-only-visible" for="password_confirmation">Password Confirmation</label>
           <input type="password" class="form-control mb-2 mr-sm-2" id="password_confirmation" name="password_confirmation"  placeholder="Enter Password confirmation" style= "background-color:white !important; color: black;" >
           
           <label class="sr-only-visible" for="verify">User Verification</label>
