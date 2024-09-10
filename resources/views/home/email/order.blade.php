@@ -19,7 +19,8 @@
         <p><img src="{{ Storage::disk('public')->url($order['image']) }}" alt="{{ $order->product_title }}" width="100"></p>
     @endif
 
-    <h2>Total purchase: {{ $orderDetails['totalProducts'] }}</h2>
+    <h3>Purchased Products Count: {{ $orderDetails['totalProducts'] }}</h3> 
+    <span class="count">Purchased Amount: {{ number_format($orderDetails['totalAmount'], 0, '.', ',') }}</span>
 
     @if (!empty($orderDetails['orderResults']))
         <h2>Purchased Products:</h2>
@@ -29,9 +30,9 @@
                 <li>
                     <p>Item {{ $counter + 1 }}</p>
                     <p><strong>{{ $product['product_title'] }}</strong></p>
-                    <p>Price: {{ $product['price'] }}</p>
+                    <p>Price: {{ number_format($product['price'], 0, '.', ',') }}</p>
                     <p>Quantity: {{ $product['quantity'] }}</p>
-                </li>
+                    <p>Total Price for Item {{ $counter + 1 }} after discounting = {{ number_format($product['price'] - ((($product['price']*$product['code'])/100 )* $product['quantity']) , 0, '.', ',')  }} </p>                </li>
                 <?php $counter++; ?>
             @endforeach
         </ul>

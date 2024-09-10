@@ -54,9 +54,9 @@
      
            </div>
            <div class="detail-box">
-              <h5>
+              <h6>
                  {{ $product->title }}
-              </h5>
+              </h6>
               @if ( $product->discount_price!=null)
               <h6 style="color: red ">
                  ${{ $product->discount_price }}

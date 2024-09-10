@@ -14,7 +14,7 @@ class CartController extends Controller
         if(Auth::id()){
          
             $cart=$request->session()->has('cart') ? $request->session()->get('cart') : null;
-            
+            //dd($cart);
             return view('home.cart.show-carts')->with('cartProducts',$cart);
         }
             return redirect()->route('login');   
@@ -24,10 +24,10 @@ class CartController extends Controller
         $product = Product::findOrFail($id);
         $user = Auth::user();
         $cart = session()->get('cart',[]);
-        
+        $selectedQuantity = request()->input('quantity');                
         if(Auth::id()){
         if(isset($cart[$id])) {
-            $cart[$id]['quantity']++;
+            $cart[$id]['quantity'] = $selectedQuantity; // Update quantity
         } else {
             $cart[$id] = [   
                 'name' => $user->name,
@@ -38,14 +38,13 @@ class CartController extends Controller
                 'price' => $product->price,
                 'image' => $product->image,
                 'code'  => $product->discount_price,
-                'quantity' => 1,
+                'quantity' => $selectedQuantity,
                 'user_id' => $user->id,
                 'product_id' => $product->id,
             ];
         }
        
           session()->put('cart', $cart);
-
 
         return redirect()->back()->with('success', '');
 

@@ -8,8 +8,7 @@ use Illuminate\Support\Facades\Log;
 class EmailService
 {
     public function sendOrderConfirmation($orderResults)
-    {
-      
+    {      
         try {
                 // Check the full structure first
                 if (!isset($orderResults['orderResults'])) {

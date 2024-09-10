@@ -17,38 +17,45 @@
                       </tr>
                     </thead>
                     <tbody> 
-                        @php
-                        $totalPrice =0;
-                        $totalProduct =0;
-                        @endphp  
-                                       
-                        @if(session('cart'))
+                            @php
+                            $totalPrice = 0;
+                            $totalProduct = 0;
+                            @endphp  
+
+                            @if(session('cart'))
                             @foreach((array) session('cart') as $id => $cartProduct)
-                                <tr>                                   
-                                    <td>{{ $cartProduct['product_title'] }}</td>   
-                                    <td>{{ $cartProduct['quantity'] }}</td>   
-                                    <td>{{ $cartProduct['code'] }}</td>  
-                                    <td>{{ $cartProduct['price']-(($cartProduct['price'] * $cartProduct['code']) / 100 )  }}</td>   
-                                    <td>  <img src="{{ asset('storage/' . $cartProduct['image']) }}" style="width:50px" class="img-responsive"></td>  
-                                    
-                                    <form action="{{ route('delete-carts', $id) }}" method="post">
-                                        @csrf                                
-                                        @method('DELETE')
-                                    <td><button type="submit" class="btn btn-danger btn-sm">Remove</button></td> 
-                                    </form>
-                                </tr>                            
-                         
-                                @php
-                                $totalPrice += $cartProduct['price']-(($cartProduct['price'] * $cartProduct['code']) / 100 ) * $cartProduct['quantity'];
-                                $totalProduct +=$cartProduct['quantity'];
-                                @endphp 
-                       
-                        @endforeach 
-                        @endif 
+                            <tr>                                   
+                                <td>{{ $cartProduct['product_title'] }}</td>   
+                                <td>{{ $cartProduct['quantity'] }}</td>   
+                                <td>{{ $cartProduct['code'] }}</td>  
+                                <td>
+                                    @php
+                                        $price = isset($cartProduct['price']) ? floatval($cartProduct['price']) : 0;
+                                        $discount = isset($cartProduct['code']) ? floatval($cartProduct['code']) : 0;
+                                        $quantity = isset($cartProduct['quantity']) ? intval($cartProduct['quantity']) : 0;
+                                        
+                                        $subTotal = ($price - (($price * $discount / 100) * $quantity));
+                                        $totalPrice += $subTotal;
+                                       
+                                        $totalProduct += $quantity;
+                                    @endphp
+                                    {{ $subTotal }}
+                                </td>   
+                                <td> <img src="{{ asset('storage/' . $cartProduct['image']) }}" style="width:50px" class="img-responsive"></td>  
+                                <form action="{{ route('delete-carts', $id) }}" method="post">
+                                    @csrf                                
+                                    @method('DELETE')
+                                <td><button type="submit" class="btn btn-danger btn-sm">Remove</button></td> 
+                                </form>
+                            </tr>                            
+                            @endforeach 
+                            @endif
+
                         <tr>
-                            <td></td>
+                            <td>total</td>
                             <td>{{ $totalProduct }}</td>
-                            <td>${{ $totalPrice }} total</td>
+                            <td></td>
+                            <td>${{ $totalPrice }} </td>
                             <!-- <td><big>total</td> -->
                             <td></td>
 

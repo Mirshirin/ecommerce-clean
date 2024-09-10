@@ -21,7 +21,7 @@ class OrderService
         $totalAmount = 0;
         $total=0;
         $lastOrder = null;
-       // dd($cart);
+      //  dd($cart);
         foreach ($cart as $product) {
             $orderData = [
                 'name' => $product['name'],
@@ -36,17 +36,18 @@ class OrderService
                 'payment_status' => 'not paid',
                 'delivery_status' => 'pending',
                 'user_id' => $userId,
+                'code' => $product['code'],
             ];
 
             $lastOrder = $this->orderRepository->createOrder($orderData);
             $total++;
 
             $discountPrice = $product['code'] != 0
-                ? $product['price'] - ($product['price'] * $product['code']) / 100
+                ? $product['price'] - ((($product['price'] * $product['code']) / 100 ) * $product['quantity'])
                 : $product['price'];
 
-            $totalAmount += $discountPrice * $product['quantity'];
-            $totalAmount = number_format($totalAmount, 2, '.', '');
+            $totalAmount += $discountPrice ;
+            $totalAmount = number_format($totalAmount, 0, '.', '');
 
             $productData = $this->productRepository->getProductById($product['product_id']);
             if ($productData->quantity > 0) {
@@ -58,10 +59,9 @@ class OrderService
 
           
         }
-//dd($orderData);
-//dd($orderDetails);
-$totalProducts = $total; // Assign the total to the reference parameter
 
+                $totalProducts = $total; // Assign the total to the reference parameter
+         //dd($orderDetails);
         return ['totalAmount' => $totalAmount, 
                 'lastOrder' =>  $lastOrder  ,
                 'orderResults' => $orderDetails, // Now this contains all orders
